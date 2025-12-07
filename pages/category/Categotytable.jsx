@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from '../../components/Table';
 
-const Categotytable = () => {
+const Categotytable = ({numofpage}) => {
      const additionalelements = () => {
 return(
         <>
@@ -28,9 +28,16 @@ return(
         {field:"title",title:"نام محصول"},
         {field:"price",title:"قیمت محصول"}
     ]
+    const searchparams ={
+        title:"جستجو",
+        placeholder:"قسمتی ازعنوان را وارد کنید",
+        searchfield:"title"
+    }
+   
     return (
         <>
-            <Table data={data} datainfo={datainfo}  additionalfield={additionalfield}/>
+        
+            <Table data={data} datainfo={datainfo}  additionalfield={additionalfield}  searchparams={searchparams} numofpage={numofpage}/>
         </>
     );
 };

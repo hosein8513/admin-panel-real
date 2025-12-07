@@ -1,31 +1,55 @@
 import React, { useEffect, useState } from 'react';
-let numofpage = 2
-const Table = ({ data, datainfo, additionalfield }) => {
-    const [inidata,setinidata] = useState(data)
+const Table = ({ data, datainfo, additionalfield,searchparams,numofpage }) => {
+    const [inidata, setinidata] = useState(data)
     const [pagedata, setpagedata] = useState([])
     const [currentpage, setcurrentpage] = useState(1)
     const [page, setpage] = useState([])
     const [pagecount, setpagecount] = useState(1)
+    const [search, setsearch] = useState("")
 
 
     useEffect(() => {
-        let pcount = Math.ceil(inidata.length / numofpage)
+        if (!Number(numofpage)) {
+        setpagecount(1)
+        setpage([1])
+        return
+    }
+        let pcount = Math.ceil(inidata.length /Number( numofpage))
         setpagecount(pcount)
         let parr = []
         for (let i = 1; i <= pcount; i++) {
             parr = [...parr, i]
         }
         setpage(parr)
-    }, [inidata])
+    }, [inidata,numofpage])
 
     useEffect(() => {
-        let start = (currentpage * numofpage) - numofpage
-        let end = (currentpage * numofpage)
+        if(!Number(numofpage))
+            return
+        let start = (currentpage *Number (numofpage)) -  Number (numofpage)
+        let end = (currentpage *  Number (numofpage))
         setpagedata(inidata.slice(start, end))
 
-    }, [currentpage,inidata])
+    }, [currentpage, inidata,numofpage])
+    useEffect(() => {
+        setinidata(data.filter(d => d[searchparams.searchfield].includes(search)))
+        setcurrentpage(1)
+    }, [search])
     return (
         <>
+            <div className="row justify-content-between">
+                <div className="col-10 col-md-6 col-lg-4">
+                    <div className="input-group mb-3 dir_ltr" >
+                        <input type="text" className="form-control" placeholder={searchparams.placeholder} onChange={(e) => setsearch(e.target.value)} />
+                        <span className="input-group-text" >{searchparams.title}</span>
+                    </div>
+                </div>
+                <div className="col-2 col-md-6 col-lg-4 d-flex flex-column align-items-end">
+                    <button className="btn btn-success d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#add_product_category_modal">
+                        <i className="fas fa-plus text-light"></i>
+                    </button>
+                </div>
+            </div>
             <table className="table table-responsive text-center table-hover table-bordered">
                 <thead className="table-secondary">
                     <tr>
@@ -40,7 +64,7 @@ const Table = ({ data, datainfo, additionalfield }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {pagedata.map((d,index) => (
+                    {pagedata.map((d, index) => (
                         <tr key={index}>
                             {datainfo.map(i =>
                                 <td key={i.field + "_" + index}>{d[i.field]}</td>
@@ -54,27 +78,31 @@ const Table = ({ data, datainfo, additionalfield }) => {
                     ))}
                 </tbody>
             </table>
-            <nav aria-label="Page navigation example" className="d-flex justify-content-center">
+            {page.length>1?
+          <nav aria-label="Page navigation example" className="d-flex justify-content-center">
                 <ul className="pagination dir_ltr">
                     <li className="page-item">
-                        <span className={`page-link ${currentpage ==1 ?"disabled":""}`}  aria-label="Previous" onClick={()=>{
+                        <span className={`page-link ${currentpage == 1 ? "disabled" : ""}`} aria-label="Previous" onClick={() => {
                             if (currentpage > 1) setcurrentpage(currentpage - 1)
                         }}>
                             <span aria-hidden="true">&raquo;</span>
                         </span>
                     </li>
                     {page.map(pages => (
-                        <li key={pages} className="page-item"><span className={`page-link ${currentpage == pages ? "alert-success":""}`}  onClick={()=>setcurrentpage(pages)}>{pages}</span></li>
+                        <li key={pages} className="page-item"><span className={`page-link ${currentpage == pages ? "alert-success" : ""}`} onClick={() => setcurrentpage(pages)}>{pages}</span></li>
 
                     ))}
 
                     <li className="page-item">
-                        <span className={`page-link ${currentpage ==pagecount ?"disabled":""}`}  aria-label="Next" onClick={()=>{if (currentpage < pagecount) setcurrentpage(currentpage + 1);}}>
+                        <span className={`page-link ${currentpage == pagecount ? "disabled" : ""}`} aria-label="Next" onClick={() => { if (currentpage < pagecount) setcurrentpage(currentpage + 1); }}>
                             <span aria-hidden="true">&laquo;</span>
                         </span>
                     </li>
                 </ul>
             </nav>
+            :null    
+        }
+          
         </>
     );
 };
