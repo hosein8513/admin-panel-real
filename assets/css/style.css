@@ -379,3 +379,7 @@ td , th {
 a{
     text-decoration: none !important;
 }
+.disabled{
+   pointer-events: none !important;
+   opacity: 0.5; 
+}

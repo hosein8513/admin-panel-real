@@ -18,7 +18,10 @@ return(
     }
     const data=[
         {id:1,title:"aaa",price:"12000"},
-        {id:2,title:"bbb",price:"15000"}
+        {id:2,title:"bbb",price:"15000"},
+        {id:3,title:"ccc",price:"16000"},
+        {id:4,title:"ccc",price:"16000"},
+        {id:5,title:"ccc",price:"16000"}
     ]
     const datainfo =[
         {field:"id",title:"#"},
