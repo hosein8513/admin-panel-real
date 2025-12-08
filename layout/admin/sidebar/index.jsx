@@ -19,31 +19,31 @@ const Sidebar = () => {
 
                         <Sidebaritem targetpath="/categories" title="مدیریت گروه محصول" icon="fas fa-stream" />
                         <Sidebaritem targetpath="/products" title="مدیریت محصول" icon="fas fa-cube" />
-                        <Sidebaritem targetpath="/" title="مدیریت برند ها" icon=" fas fa-copyright" />
-                        <Sidebaritem targetpath="/" title="مدیریت گارانتی ها" icon=" fab fa-pagelines" />
-                        <Sidebaritem targetpath="/" title="مدیریت رنگ ها" icon="fas fa-palette" />
-                        <Sidebaritem targetpath="/" title="مدیریت تخفیف ها" icon="fas fa-percentage" />
+                        <Sidebaritem targetpath="/brand" title="مدیریت برند ها" icon=" fas fa-copyright" />
+                        <Sidebaritem targetpath="/guaratie" title="مدیریت گارانتی ها" icon=" fab fa-pagelines" />
+                        <Sidebaritem targetpath="/colors" title="مدیریت رنگ ها" icon="fas fa-palette" />
+                        <Sidebaritem targetpath="/discount" title="مدیریت تخفیف ها" icon="fas fa-percentage" />
 
                         {/* <!-- =================================== --> */}
                         <Grouptitle title="سفارشات و سبد" />
-                        <Sidebaritem targetpath="/" title="مدیریت سبد ها" icon="fas fa-shopping-basket" />
+                        <Sidebaritem targetpath="/cart" title="مدیریت سبد ها" icon="fas fa-shopping-basket" />
 
-                        <Sidebaritem targetpath="/" title="مدیریت سفارشات" icon="fas fa-luggage-cart" />
-                        <Sidebaritem targetpath="/" title="مدیریت نحوه ارسال" icon="fas fa-truck-loading" />
+                        <Sidebaritem targetpath="/order" title="مدیریت سفارشات" icon="fas fa-luggage-cart" />
+                        <Sidebaritem targetpath="/delivery" title="مدیریت نحوه ارسال" icon="fas fa-truck-loading" />
 
 
 
                         {/* <!-- =================================== --> */}
                         <Grouptitle title="کاربران و همکاران" />
-                        <Sidebaritem title="مشاهده کاربران" icon="fas fa-users" />
-                        <Sidebaritem title="نقش ها" icon="fas fa-user-tag" />
-                        <Sidebaritem title="مجوز ها" icon="fas fa-shield-alt" />
+                        <Sidebaritem targetpath="/users" title="مشاهده کاربران" icon="fas fa-users" />
+                        <Sidebaritem targetpath="/roles" title="نقش ها" icon="fas fa-user-tag" />
+                        <Sidebaritem targetpath="/permissions" title="مجوز ها" icon="fas fa-shield-alt" />
 
 
                         {/* <!-- =================================== --> */}
                         <Grouptitle title="ارتباطات" />
-                        <Sidebaritem title="سوال ها" icon=" fas fa-question-circle " />
-                        <Sidebaritem title="نظرات" icon="fas fa-comment" />
+                        <Sidebaritem targetpath="/questions" title="سوال ها" icon=" fas fa-question-circle " />
+                        <Sidebaritem targetpath="/comments" title="نظرات" icon="fas fa-comment" />
 
 
                     </div>

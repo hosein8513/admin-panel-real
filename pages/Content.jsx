@@ -4,6 +4,18 @@ import Category from './category/Category';
 import Product from './product/Product';
 import { Route, Routes } from 'react-router-dom';
 import Dashboard from './dashboard/Dashboard';
+import Colors from './colors/Colors';
+import Guarantie from './guarantie/Guarantie';
+import Brand from './brand/Brand';
+import Discount from './discount.jsx/Discount';
+import Cart from './cart/Cart';
+import Order from './order/Order';
+import Delivery from './delivery/Delivery';
+import Users from './users/Users';
+import Roles from './roles/Roles';
+import Permitions from './permition/Permitions';
+import Questions from './questions/Questions';
+import Comments from './comments/Comments';
 
 const Content = () => {
     const { showSidebar } = useContext(Admincontext)
@@ -16,7 +28,18 @@ const Content = () => {
                     <Route path='/categories' element={<Category />} />
                     <Route path='/products' element={<Product />} />
                     <Route path='*' element={<Dashboard />} />
-
+                    <Route path='/colors' element={<Colors />} />
+                    <Route path='/guaratie' element={<Guarantie/>}/>
+                    <Route path='/brand' element={<Brand/>}/>
+                    <Route path='/discount' element={<Discount/>}/>
+                    <Route path='/cart' element={<Cart/>}/>
+                    <Route path='/order' element={<Order/>}/>
+                    <Route path='/delivery' element={<Delivery/>}/>
+                    <Route path='/users' element={<Users/>}/>
+                    <Route path='/roles' element={<Roles/>}/>
+                    <Route path='/permissions' element={<Permitions/>}/>
+                    <Route path='/questions' element={<Questions/>}/>
+                    <Route path='/comments' element={<Comments/>}/>
                 </Routes>
             </section>
         </div>
