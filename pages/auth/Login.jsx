@@ -4,6 +4,7 @@ import * as Yup from "yup"
 import Authform from '../../components/Authform';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Alert } from '../../utills/Alert';
 
 const Login = () => {
     const navigate = useNavigate()
@@ -22,7 +23,11 @@ const Login = () => {
             if (res.status == 200) {
                 localStorage.setItem('localtoken', JSON.stringify(res.data))
                 navigate('/')
+            }else{
+              Alert(res.data.message,"متاسفیم")  
             }
+        }).catch(error=>{
+            Alert("لطفا اتصال خود را بررسی کنید","خطا")
         })
 
     }
