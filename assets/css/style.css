@@ -383,3 +383,7 @@ a{
    pointer-events: none !important;
    opacity: 0.5; 
 }
+
+.fullsc{
+    width: 100%;
+}
