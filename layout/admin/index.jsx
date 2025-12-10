@@ -1,24 +1,35 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Navbar from "./header/index";
 import Sidebar from "./sidebar/index";
 import Admincontextcontainer, { Admincontext } from '../assets/context/admincontext';
 import Dashboard from '../../pages/dashboard/Dashboard';
 import Category from '../../pages/category/Category';
 import Content from '../../pages/Content';
+import { Navigate } from 'react-router-dom';
+import { useIslogin } from '../../src/hooks/Authhook';
 const Index = () => {
-  useEffect(() => {
-    // import('../assets/js/first');
-  }, [])
+ const [loading,login] = useIslogin()
   return (
     <Admincontextcontainer>
-      <div>
+     {
+      loading?(
+        <h1 className='p-4 text-center animate-pulse text-gray-600'>لطفا صبر کنید...</h1>
+      ):login?(
+        <div>
 
-        <Content />
+          <Content />
+     
+          <Navbar />
+     
+          <Sidebar />
+       
 
-        <Navbar />
+        </div>
+      ):(
+        <Navigate to={'/auth/login'}/>
+      )
+     }
 
-        <Sidebar />
-      </div>
     </Admincontextcontainer>
   );
 };

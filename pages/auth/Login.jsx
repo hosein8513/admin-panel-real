@@ -3,21 +3,26 @@ import { ErrorMessage, FastField, Field, Form, Formik } from 'formik';
 import * as Yup from "yup"
 import Authform from '../../components/Authform';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate()
     const initialValue = {
         phone: '',
         password: '',
         remember: false
     }
-    const onSubmit = (value) => {
+    const onSubmit = (value,navigate) => {
         axios.post('https://ecomadminapi.azhadev.ir/api/auth/login', {
             ...value,
             remember: value.remember ? 1 : 0
 
         }).then(res => {
             console.log(res);
-
+            if (res.status == 200) {
+                localStorage.setItem('localtoken', JSON.stringify(res.data))
+                navigate('/')
+            }
         })
 
     }
@@ -34,7 +39,7 @@ const Login = () => {
 
         <div className="w-8/12 min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-200 to-indigo-200 p-6" dir="rtl">
             <Formik
-                onSubmit={onSubmit}
+                onSubmit={value=>onSubmit(value,navigate)}
                 validationSchema={validationSchema}
                 initialValues={initialValue}
                 validateOnBlur={true}
