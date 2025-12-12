@@ -6,63 +6,67 @@ import { Alert } from '../../utills/Alert';
 import { elements } from 'chart.js';
 import Showinmenu from './additions/Showinmenu';
 import Actions from './additions/Actions';
-import { useLocation, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
+import jMoment from 'jalali-moment'
+import { createdate } from '../../utills/createdate';
 
-const Categotytable = ({numofpage}) => {
+const Categotytable = ({ numofpage }) => {
     const params = useParams()
     const location = useLocation()
-    const [data,setdata] = useState([])
-    const handlegetcategories = async ()=>{
-        try{
+    const [data, setdata] = useState([])
+    const handlegetcategories = async () => {
+        try {
             const res = await getcategoryservice(params.categoryId)
-            if(res.status ==200){
+            if (res.status == 200) {
                 setdata(res.data.data)
-            }else{
-                Alert(res.data.message,"مشکلی رخ داده")
+            } else {
+                Alert(res.data.message, "مشکلی رخ داده")
             }
-        }catch{
-            Alert("لطفا اتصال خود را بررسی کنید","خطا")
+        } catch {
+            Alert("لطفا اتصال خود را بررسی کنید", "خطا")
         }
     }
-    useEffect(()=>{
+    useEffect(() => {
         console.log(params);
-        
+
         handlegetcategories()
-    },[params])
-    
+    }, [params])
+
     const additionalfield = [
         {
-            title:"نمایش در منو",
-            elements:(rowdata)=><Showinmenu rowdata={rowdata}/>
+            title: "تاریخ",
+            elements: (rowdata) =>createdate(rowdata.create_at)
         },
-     {
-        title: "عملیات",
-        elements: (rowdata) => <Actions rowdata={rowdata}/>
-     }
+        {
+            title: "نمایش در منو",
+            elements: (rowdata) => <Showinmenu rowdata={rowdata} />
+        },
+        {
+            title: "عملیات",
+            elements: (rowdata) => <Actions rowdata={rowdata} />
+        }
     ]
-   
-    const datainfo =[
-        {field:"id",title:"#"},
-        {field:"title",title:"نام محصول"},
-        {field:"parent_id",title:" والد"},
-        {field:"created_at",title:"تاریخ"}
+
+    const datainfo = [
+        { field: "id", title: "#" },
+        { field: "title", title: "نام محصول" },
+        { field: "parent_id", title: " والد" },
     ]
-    const searchparams ={
-        title:"جستجو",
-        placeholder:"قسمتی ازعنوان را وارد کنید",
-        searchfield:"title"
+    const searchparams = {
+        title: "جستجو",
+        placeholder: "قسمتی ازعنوان را وارد کنید",
+        searchfield: "title"
     }
-   
+
     return (
         <>
-        {location.state?(
-            <h5 className='text-center'>
-                <span>زیرگروه:</span>
-                <span className='text-blue-400'>{location.state.parentdata.title}</span>
-            </h5>
-        ):null}
-        
-            <Table data={data} datainfo={datainfo}  additionalfield={additionalfield}  searchparams={searchparams} numofpage={numofpage} elements={elements}/>
+            <Outlet />
+            {
+                data.length>0?(
+                    <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} />
+                ):
+                <h5 className='text-center text-red-500'>داده ای یافت نشد</h5>
+            }
         </>
     );
 };
