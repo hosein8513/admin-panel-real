@@ -6,12 +6,15 @@ import { Alert } from '../../utills/Alert';
 import { elements } from 'chart.js';
 import Showinmenu from './additions/Showinmenu';
 import Actions from './additions/Actions';
+import { useLocation, useParams } from 'react-router-dom';
 
 const Categotytable = ({numofpage}) => {
+    const params = useParams()
+    const location = useLocation()
     const [data,setdata] = useState([])
     const handlegetcategories = async ()=>{
         try{
-            const res = await getcategoryservice(25)
+            const res = await getcategoryservice(params.categoryId)
             if(res.status ==200){
                 setdata(res.data.data)
             }else{
@@ -22,8 +25,10 @@ const Categotytable = ({numofpage}) => {
         }
     }
     useEffect(()=>{
+        console.log(params);
+        
         handlegetcategories()
-    },[])
+    },[params])
     
     const additionalfield = [
         {
@@ -50,6 +55,12 @@ const Categotytable = ({numofpage}) => {
    
     return (
         <>
+        {location.state?(
+            <h5 className='text-center'>
+                <span>زیرگروه:</span>
+                <span className='text-blue-400'>{location.state.parentdata.title}</span>
+            </h5>
+        ):null}
         
             <Table data={data} datainfo={datainfo}  additionalfield={additionalfield}  searchparams={searchparams} numofpage={numofpage} elements={elements}/>
         </>
