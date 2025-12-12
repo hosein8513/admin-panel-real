@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-const Table = ({ data, datainfo, additionalfield,searchparams,numofpage }) => {
+const Table = ({ data, datainfo, additionalfield,searchparams,numofpage,elements}) => {
     const [inidata, setinidata] = useState(data)
     const [pagedata, setpagedata] = useState([])
     const [currentpage, setcurrentpage] = useState(1)
@@ -34,7 +34,7 @@ const Table = ({ data, datainfo, additionalfield,searchparams,numofpage }) => {
     useEffect(() => {
         setinidata(data.filter(d => d[searchparams.searchfield].includes(search)))
         setcurrentpage(1)
-    }, [search])
+    }, [search,data])
     return (
         <>
             <div className="row justify-content-between">
@@ -57,9 +57,9 @@ const Table = ({ data, datainfo, additionalfield,searchparams,numofpage }) => {
                             <th key={i.field}>{i.title}</th>
                         ))}
                         {
-                            additionalfield ? (
-                                <th>{additionalfield.title}</th>
-                            ) : null
+                            additionalfield ? additionalfield.map((a,index)=>(
+                                <th key={index}>{a.title}</th>
+                            )) : null
                         }
                     </tr>
                 </thead>
@@ -70,10 +70,10 @@ const Table = ({ data, datainfo, additionalfield,searchparams,numofpage }) => {
                                 <td key={i.field + "_" + index}>{d[i.field]}</td>
                             )}
                             {
-                                additionalfield ? (
-                                    <th>{additionalfield.elements()}</th>
-                                ) : null
-                            }
+                            additionalfield ? additionalfield.map((a,index)=>(
+                                <th key={index}>{a.elements(d)}</th>
+                            )) : null
+                        }
                         </tr>
                     ))}
                 </tbody>
