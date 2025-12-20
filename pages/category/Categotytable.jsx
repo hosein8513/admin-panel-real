@@ -19,11 +19,11 @@ const Categotytable = ({ numofpage }) => {
             const res = await getcategoryservice(params.categoryId)
             if (res.status == 200) {
                 setdata(res.data.data)
-            } else {
-                Alert(res.data.message, "مشکلی رخ داده")
             }
-        } catch {
-            Alert("لطفا اتصال خود را بررسی کنید", "خطا")
+
+        } catch (error) {
+            console.log(error);
+
         }
     }
     useEffect(() => {
@@ -35,7 +35,7 @@ const Categotytable = ({ numofpage }) => {
     const additionalfield = [
         {
             title: "تاریخ",
-            elements: (rowdata) =>createdate(rowdata.create_at)
+            elements: (rowdata) => createdate(rowdata.create_at)
         },
         {
             title: "نمایش در منو",
@@ -62,10 +62,10 @@ const Categotytable = ({ numofpage }) => {
         <>
             <Outlet />
             {
-                data.length>0?(
+                data.length > 0 ? (
                     <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} />
-                ):
-                <h5 className='text-center text-red-500'>داده ای یافت نشد</h5>
+                ) :
+                    <h5 className='text-center text-red-500'>داده ای یافت نشد</h5>
             }
         </>
     );
