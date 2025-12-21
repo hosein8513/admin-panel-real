@@ -4,14 +4,14 @@ import { getcategoryservice } from '../../src/services/category';
 import { elements } from 'chart.js';
 import Showinmenu from './additions/Showinmenu';
 import Actions from './additions/Actions';
-import {  useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { createdate } from '../../utills/createdate';
 import Addcategory from './Addcategory';
 
 const Categotytable = ({ numofpage }) => {
     const params = useParams()
     const [data, setdata] = useState([])
-    const [loading,setloading] = useState(false)
+    const [loading, setloading] = useState(false)
     const [forceRender, setForceRender] = useState(0)
     const handlegetcategories = async () => {
         setloading(true)
@@ -25,7 +25,7 @@ const Categotytable = ({ numofpage }) => {
             console.log(error);
 
         }
-        finally{
+        finally {
             setloading(false)
         }
     }
@@ -63,6 +63,7 @@ const Categotytable = ({ numofpage }) => {
 
     return (
         <>
+            <Outlet />
             <Addcategory setForceRender={setForceRender} />
 
 

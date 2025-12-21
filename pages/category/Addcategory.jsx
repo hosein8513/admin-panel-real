@@ -7,6 +7,7 @@ import { createNewCategory, getcategoryservice } from '../../src/services/catego
 import { Alert, SuccessAlert } from '../../utills/Alert';
 import Loader from '../../components/Loader';
 import { readUsedSize } from 'chart.js/helpers';
+import { useParams } from 'react-router-dom';
 
 const initialvalue = {
     parent_id: '',
@@ -16,23 +17,23 @@ const initialvalue = {
     is_active: true,
     show_in_menu: true,
 }
-const onsubmit = async(values, actions,setForceRender) => {
-try{
-    values={
-        ...values,
-        is_active:values.is_active?1:0,
-        show_in_menu:values.show_in_menu?1:0
+const onsubmit = async (values, actions, setForceRender) => {
+    try {
+        values = {
+            ...values,
+            is_active: values.is_active ? 1 : 0,
+            show_in_menu: values.show_in_menu ? 1 : 0
 
+        }
+        const res = await createNewCategory(values)
+        if (res.status == 201) {
+            SuccessAlert("عملیات با موفقیت انجام شد")
+            actions.resetForm()
+            setForceRender(last => last + 1)
+        }
+    } catch (error) {
+        console.log(error.massage);
     }
-    const res = await createNewCategory(values)
-    if(res.status == 201){
-        SuccessAlert("عملیات با موفقیت انجام شد")
-        actions.resetForm()
-        setForceRender(last=>last+1)
-    }
-}catch(error){
-    console.log(error.massage);
-}
 }
 
 const validationschema = Yup.object({
@@ -40,8 +41,8 @@ const validationschema = Yup.object({
     title: Yup.string().required('لطفا این قسمت را پر کنید').matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'فقط از حروف فارسی یا انگلیسی یا اعداد استفاده کنید'),
     description: Yup.string().matches(/^[A-Za-z0-9\u0600-\u06FF\s]+$/, 'فقط از حروف فارسی یا انگلیسی یا اعداد استفاده کنید'),
     image: Yup.mixed()
-    .nullable()
-    .notRequired()
+        .nullable()
+        .notRequired()
         .test(
             "filesize",
             "حجم فایل نمیتواند بیشتر از 500 کیلو بایت باشد",
@@ -60,7 +61,9 @@ const validationschema = Yup.object({
 
 
 
-const Addcategory = ({setForceRender}) => {
+const Addcategory = ({ setForceRender }) => {
+    const params = useParams()
+    const [reini, setreini] = useState(null)
     const [parent, setparent] = useState([])
     const handlegetcategoryparent = async () => {
         try {
@@ -68,17 +71,27 @@ const Addcategory = ({setForceRender}) => {
             if (res.status == 200) {
                 const allparams = res.data.data
 
-                setparent(allparams.map(p=>{
-                    return {id:p.id,value: p.title}
+                setparent(allparams.map(p => {
+                    return { id: p.id, value: p.title }
                 }))
             }
         } catch (err) {
             Alert("مشکلی در دریافت اطلاعات رخ داده است", "خطا")
         }
     }
-    useEffect(()=>{
+    useEffect(() => {
         handlegetcategoryparent()
-    },[])
+    }, [])
+    useEffect(() => {
+        if (params.categoryId) {
+            setreini({
+                ...initialvalue,
+                parent_id: params.categoryId
+            })
+        } else {
+            setreini(null)
+        }
+    }, [params.categoryId])
     return (
         <>
 
@@ -89,22 +102,23 @@ const Addcategory = ({setForceRender}) => {
                 title="افزودن دسته محصولات"
             >
                 <Formik
-                    initialValues={initialvalue}
-                    onSubmit={(values,action)=> onsubmit(values,action,setForceRender)
+                    enableReinitialize
+                    initialValues={reini || initialvalue}
+                    onSubmit={(values, action) => onsubmit(values, action, setForceRender)
                     }
                     validationSchema={validationschema}
                 >
                     <Form>
                         <div className="container">
                             <div className="row justify-content-center">
-                                {parent.length>0?(<Formikcontrol
+                                {parent.length > 0 ? (<Formikcontrol
                                     className="col-md-6 col-lg-8"
                                     control="select"
                                     options={parent}
                                     name="parent_id"
                                     label="دسته والد"
-                                />):null}
-                                
+                                />) : null}
+
                                 <Formikcontrol
                                     className="col-md-6 col-lg-8"
                                     control="input"
@@ -145,15 +159,15 @@ const Addcategory = ({setForceRender}) => {
                                     </div>
                                 </div>
                                 <div className="btn_box text-center col-12 col-md-6 col-lg-8 mt-4">
-                                   <FastField>
-                                    {({form})=>{
-                                        return(
-                                             <button className="btn btn-primary"type='submit'>ذخیره
-                                             {form.isSubmitting?<Loader color={'text-white'}size={true} inline={true}/>:null}
-                                             </button>
-                                        )
-                                    }}
-                                   </FastField>
+                                    <FastField>
+                                        {({ form }) => {
+                                            return (
+                                                <button className="btn btn-primary" type='submit'>ذخیره
+                                                    {form.isSubmitting ? <Loader color={'text-white'} size={true} inline={true} /> : null}
+                                                </button>
+                                            )
+                                        }}
+                                    </FastField>
                                 </div>
 
                             </div>
