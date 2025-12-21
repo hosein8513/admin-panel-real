@@ -3,8 +3,8 @@ import Modals from '../../components/Modals';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import Formikcontrol from '../../components/form/Formikcontrol';
-import { getcategoryservice } from '../../src/services/category';
-import { Alert } from '../../utills/Alert';
+import { createNewCategory, getcategoryservice } from '../../src/services/category';
+import { Alert, SuccessAlert } from '../../utills/Alert';
 
 const initialvalue = {
     parent_id: '',
@@ -14,8 +14,23 @@ const initialvalue = {
     is_active: true,
     show_in_menu: true,
 }
-const onsubmit = (values, actions) => {
-    console.log(values);
+const onsubmit = async(values, actions,setForceRender) => {
+try{
+    values={
+        ...values,
+        is_active:values.is_active?1:0,
+        show_in_menu:values.show_in_menu?1:0
+
+    }
+    const res = await createNewCategory(values)
+    if(res.status == 201){
+        SuccessAlert("عملیات با موفقیت انجام شد")
+        actions.resetForm()
+        setForceRender(last=>last+1)
+    }
+}catch(error){
+    console.log(error.massage);
+}
 }
 
 const validationschema = Yup.object({
@@ -23,6 +38,8 @@ const validationschema = Yup.object({
     title: Yup.string().required('لطفا این قسمت را پر کنید').matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'فقط از حروف فارسی یا انگلیسی یا اعداد استفاده کنید'),
     description: Yup.string().matches(/^[A-Za-z0-9\u0600-\u06FF\s]+$/, 'فقط از حروف فارسی یا انگلیسی یا اعداد استفاده کنید'),
     image: Yup.mixed()
+    .nullable()
+    .notRequired()
         .test(
             "filesize",
             "حجم فایل نمیتواند بیشتر از 500 کیلو بایت باشد",
@@ -41,7 +58,7 @@ const validationschema = Yup.object({
 
 
 
-const Addcategory = () => {
+const Addcategory = ({setForceRender}) => {
     const [parent, setparent] = useState([])
     const handlegetcategoryparent = async () => {
         try {
@@ -71,7 +88,8 @@ const Addcategory = () => {
             >
                 <Formik
                     initialValues={initialvalue}
-                    onSubmit={onsubmit}
+                    onSubmit={(values,action)=> onsubmit(values,action,setForceRender)
+                    }
                     validationSchema={validationschema}
                 >
                     <Form>
@@ -119,7 +137,7 @@ const Addcategory = () => {
                                     <div className="form-check form-switch col-5 col-md-2">
                                         <Formikcontrol
                                             control='switch'
-                                            name='show_in_manu'
+                                            name='show_in_menu'
                                             label='نمایش در منو'
                                         />
                                     </div>

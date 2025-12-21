@@ -9,11 +9,13 @@ import Actions from './additions/Actions';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 import jMoment from 'jalali-moment'
 import { createdate } from '../../utills/createdate';
+import Addcategory from './Addcategory';
 
 const Categotytable = ({ numofpage }) => {
     const params = useParams()
     const location = useLocation()
     const [data, setdata] = useState([])
+    const [forceRender, setForceRender] = useState(0)
     const handlegetcategories = async () => {
         try {
             const res = await getcategoryservice(params.categoryId)
@@ -30,7 +32,7 @@ const Categotytable = ({ numofpage }) => {
         console.log(params);
 
         handlegetcategories()
-    }, [params])
+    }, [params, forceRender])
 
     const additionalfield = [
         {
@@ -60,10 +62,12 @@ const Categotytable = ({ numofpage }) => {
 
     return (
         <>
-            <Outlet />
+            <Addcategory setForceRender={setForceRender} />
             {
                 data.length > 0 ? (
-                    <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} />
+                    <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} >
+
+                    </Table>
                 ) :
                     <h5 className='text-center text-red-500'>داده ای یافت نشد</h5>
             }

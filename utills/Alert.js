@@ -7,3 +7,11 @@ export const Alert = (text,title)=>{
   text
 });
 }
+
+export const SuccessAlert=(title)=>{
+Swal.fire({
+  title,
+  icon: "success",
+  draggable: true
+});
+}
