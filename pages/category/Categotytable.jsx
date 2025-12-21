@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../../components/Table';
-import Categoryatr from './Categoryatr';
 import { getcategoryservice } from '../../src/services/category';
-import { Alert } from '../../utills/Alert';
 import { elements } from 'chart.js';
 import Showinmenu from './additions/Showinmenu';
 import Actions from './additions/Actions';
-import { Outlet, useLocation, useParams } from 'react-router-dom';
-import jMoment from 'jalali-moment'
+import {  useParams } from 'react-router-dom';
 import { createdate } from '../../utills/createdate';
 import Addcategory from './Addcategory';
 
 const Categotytable = ({ numofpage }) => {
     const params = useParams()
-    const location = useLocation()
     const [data, setdata] = useState([])
+    const [loading,setloading] = useState(false)
     const [forceRender, setForceRender] = useState(0)
     const handlegetcategories = async () => {
+        setloading(true)
         try {
             const res = await getcategoryservice(params.categoryId)
             if (res.status == 200) {
@@ -26,6 +24,9 @@ const Categotytable = ({ numofpage }) => {
         } catch (error) {
             console.log(error);
 
+        }
+        finally{
+            setloading(false)
         }
     }
     useEffect(() => {
@@ -63,14 +64,12 @@ const Categotytable = ({ numofpage }) => {
     return (
         <>
             <Addcategory setForceRender={setForceRender} />
-            {
-                data.length > 0 ? (
-                    <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} >
 
-                    </Table>
-                ) :
-                    <h5 className='text-center text-red-500'>داده ای یافت نشد</h5>
-            }
+
+            <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} loading={loading}>
+
+            </Table>
+
         </>
     );
 };

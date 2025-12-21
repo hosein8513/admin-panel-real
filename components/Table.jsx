@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-const Table = ({ data, datainfo, additionalfield,searchparams,numofpage,elements}) => {
+import Loader from './Loader';
+const Table = ({loading, data, datainfo, additionalfield,searchparams,numofpage,elements}) => {
     const [inidata, setinidata] = useState(data)
     const [pagedata, setpagedata] = useState([])
     const [currentpage, setcurrentpage] = useState(1)
@@ -50,7 +51,11 @@ const Table = ({ data, datainfo, additionalfield,searchparams,numofpage,elements
                     </button>
                 </div>
             </div>
-            <table className="table table-responsive text-center table-hover table-bordered">
+          {
+          loading?
+          <Loader color={'text-primary'}/>
+          :data.length >0?(
+              <table className="table table-responsive text-center table-hover table-bordered ">
                 <thead className="table-secondary">
                     <tr>
                         {datainfo.map(i => (
@@ -78,6 +83,7 @@ const Table = ({ data, datainfo, additionalfield,searchparams,numofpage,elements
                     ))}
                 </tbody>
             </table>
+          ):  <h5 className='text-center text-red-500'>داده ای یافت نشد</h5>}
             {page.length>1?
           <nav aria-label="Page navigation example" className="d-flex justify-content-center">
                 <ul className="pagination dir_ltr">

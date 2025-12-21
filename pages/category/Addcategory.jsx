@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Modals from '../../components/Modals';
 import * as Yup from 'yup';
-import { Form, Formik } from 'formik';
+import { FastField, Form, Formik } from 'formik';
 import Formikcontrol from '../../components/form/Formikcontrol';
 import { createNewCategory, getcategoryservice } from '../../src/services/category';
 import { Alert, SuccessAlert } from '../../utills/Alert';
+import Loader from '../../components/Loader';
+import { readUsedSize } from 'chart.js/helpers';
 
 const initialvalue = {
     parent_id: '',
@@ -143,7 +145,15 @@ const Addcategory = ({setForceRender}) => {
                                     </div>
                                 </div>
                                 <div className="btn_box text-center col-12 col-md-6 col-lg-8 mt-4">
-                                    <button className="btn btn-primary ">ذخیره</button>
+                                   <FastField>
+                                    {({form})=>{
+                                        return(
+                                             <button className="btn btn-primary"type='submit'>ذخیره
+                                             {form.isSubmitting?<Loader color={'text-white'}size={true} inline={true}/>:null}
+                                             </button>
+                                        )
+                                    }}
+                                   </FastField>
                                 </div>
 
                             </div>
