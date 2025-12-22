@@ -1,62 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modals from '../../components/Modals';
-import * as Yup from 'yup';
 import { FastField, Form, Formik } from 'formik';
 import Formikcontrol from '../../components/form/Formikcontrol';
-import { createNewCategory, getcategoryservice } from '../../src/services/category';
+import { getcategoryservice, getSingleCategory } from '../../src/services/category';
 import { Alert, SuccessAlert } from '../../utills/Alert';
 import Loader from '../../components/Loader';
-import { readUsedSize } from 'chart.js/helpers';
 import { useParams } from 'react-router-dom';
+import { Categorycontext } from '../../layout/assets/context/categorycontext';
+import { initialvalue, onsubmit, validationschema } from './core';
 
-const initialvalue = {
-    parent_id: '',
-    title: '',
-    description: '',
-    image: null,
-    is_active: true,
-    show_in_menu: true,
-}
-const onsubmit = async (values, actions, setForceRender) => {
-    try {
-        values = {
-            ...values,
-            is_active: values.is_active ? 1 : 0,
-            show_in_menu: values.show_in_menu ? 1 : 0
-
-        }
-        const res = await createNewCategory(values)
-        if (res.status == 201) {
-            SuccessAlert("عملیات با موفقیت انجام شد")
-            actions.resetForm()
-            setForceRender(last => last + 1)
-        }
-    } catch (error) {
-        console.log(error.massage);
-    }
-}
-
-const validationschema = Yup.object({
-    parent_id: Yup.number(),
-    title: Yup.string().required('لطفا این قسمت را پر کنید').matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'فقط از حروف فارسی یا انگلیسی یا اعداد استفاده کنید'),
-    description: Yup.string().matches(/^[A-Za-z0-9\u0600-\u06FF\s]+$/, 'فقط از حروف فارسی یا انگلیسی یا اعداد استفاده کنید'),
-    image: Yup.mixed()
-        .nullable()
-        .notRequired()
-        .test(
-            "filesize",
-            "حجم فایل نمیتواند بیشتر از 500 کیلو بایت باشد",
-            (value) => !value ? true : (value.size <= 500 * 1024)
-        )
-        .test(
-            "format",
-            "فرمت فایل باید jpg باشد0",
-            (value) => !value ? true : (value.type === "image/jpeg")
-        ),
-    is_active: Yup.boolean(),
-    show_in_menu: Yup.boolean()
-
-})
 
 
 
@@ -65,6 +17,9 @@ const Addcategory = ({ setForceRender }) => {
     const params = useParams()
     const [reini, setreini] = useState(null)
     const [parent, setparent] = useState([])
+    const { editId, seteditId } = useContext(Categorycontext)
+    const [editcategory, seteditcategory] = useState(null)
+
     const handlegetcategoryparent = async () => {
         try {
             const res = await getcategoryservice()
@@ -79,11 +34,38 @@ const Addcategory = ({ setForceRender }) => {
             Alert("مشکلی در دریافت اطلاعات رخ داده است", "خطا")
         }
     }
+
+    const handlegetSingleCategory = async () => {
+        try {
+            const res = await getSingleCategory(editId)
+            if (res.status == 200) {
+                const oldCategory = res.data.data
+                seteditcategory(oldCategory)
+            }
+        } catch (err) {
+            Alert("مشگلی در دریافت دسته رخ داده است", "خطا")
+        }
+    }
+    useEffect(() => {
+        if (editId) handlegetSingleCategory()
+        else seteditcategory(null)
+    }, [editId])
+
     useEffect(() => {
         handlegetcategoryparent()
     }, [])
     useEffect(() => {
-        if (params.categoryId) {
+        if(editcategory){
+            setreini({
+                parent_id:editcategory.parent_id || '',
+                title:editcategory.title,
+                description:editcategory.description,
+                image:null,
+                is_active:editcategory.is_active?true:false,
+                show_in_menu:editcategory.show_in_menu?true:false
+            })
+        }
+       else if (params.categoryId) {
             setreini({
                 ...initialvalue,
                 parent_id: params.categoryId
@@ -91,20 +73,24 @@ const Addcategory = ({ setForceRender }) => {
         } else {
             setreini(null)
         }
-    }, [params.categoryId])
+    }, [params.categoryId,editcategory])
     return (
         <>
+            <button className="btn btn-success d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#add_product_category_modal"
 
+                onClick={() => seteditId(null)}>
+                <i className="fas fa-plus text-light"></i>
+            </button>
 
             <Modals
                 fullscreen={true}
                 id="add_product_category_modal"
-                title="افزودن دسته محصولات"
+                title={editId?'ویرایش:'+(editcategory?editcategory.title:''):'افزودن دسته محصولات'}
             >
                 <Formik
                     enableReinitialize
                     initialValues={reini || initialvalue}
-                    onSubmit={(values, action) => onsubmit(values, action, setForceRender)
+                    onSubmit={(values, action) => onsubmit(values, action, setForceRender,editId)
                     }
                     validationSchema={validationschema}
                 >
@@ -135,13 +121,14 @@ const Addcategory = ({ setForceRender }) => {
                                     placeholder='توضیحات'
 
                                 />
+                               {!editId?
                                 <Formikcontrol
                                     className='clo-mg-6 col-lg-8'
                                     control='file'
                                     name='image'
                                     label='تصویر'
                                     placeholder='تصویر'
-                                />
+                                />:null}
                                 <div className="w-full col-12 col-md-6 col-lg-8 row justify-center gap-4">
                                     <div className="form-check form-switch col-5 col-md-2">
                                         <Formikcontrol

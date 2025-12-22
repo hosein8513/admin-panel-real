@@ -64,11 +64,11 @@ const Categotytable = ({ numofpage }) => {
     return (
         <>
             <Outlet />
-            <Addcategory setForceRender={setForceRender} />
 
 
             <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} loading={loading}>
 
+            <Addcategory setForceRender={setForceRender} />
             </Table>
 
         </>

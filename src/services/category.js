@@ -4,6 +4,10 @@ export const getcategoryservice = (id=null)=>{
 return httpservice(`/admin/categories${id?`?parent=${id}`:''}`,'get')
 }
 
+export const getSingleCategory = (id)=>{
+    return httpservice(`/admin/categories/${id}`,'get')
+}
+
 export const createNewCategory = (data)=>{
     if(data.image){
         let formdata = new FormData()
@@ -15,4 +19,9 @@ export const createNewCategory = (data)=>{
         formdata.append('show_in_menu',data.show_in_menu)
     }
     return httpservice('/admin/categories','post',data)
+}
+
+
+export const editCategory = (id,data)=>{
+    return httpservice(`/admin/categories/${id}`,'put',data)
 }
