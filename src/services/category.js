@@ -25,3 +25,6 @@ export const createNewCategory = (data)=>{
 export const editCategory = (id,data)=>{
     return httpservice(`/admin/categories/${id}`,'put',data)
 }
+export const deleteCategory = (id)=>{
+    return httpservice(`/admin/categories/${id}`,'delete')
+}

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../../components/Table';
-import { getcategoryservice } from '../../src/services/category';
+import { deleteCategory, getcategoryservice } from '../../src/services/category';
 import { elements } from 'chart.js';
 import Showinmenu from './additions/Showinmenu';
 import Actions from './additions/Actions';
 import { Outlet, useParams } from 'react-router-dom';
 import { createdate } from '../../utills/createdate';
 import Addcategory from './Addcategory';
+import { Confirm } from '../../utills/Alert';
 
 const Categotytable = ({ numofpage }) => {
     const params = useParams()
@@ -29,6 +30,12 @@ const Categotytable = ({ numofpage }) => {
             setloading(false)
         }
     }
+
+    const handleDeleteCategory = (rowdata) => {
+        Confirm("حذف شد", `دسته بندی ${rowdata.title} با موفقیت حذف شد!`)
+        deleteCategory(rowdata.id)
+        setdata(data.filter(d=>d.id != rowdata.id))
+    }
     useEffect(() => {
         console.log(params);
 
@@ -46,7 +53,7 @@ const Categotytable = ({ numofpage }) => {
         },
         {
             title: "عملیات",
-            elements: (rowdata) => <Actions rowdata={rowdata} />
+            elements: (rowdata) => <Actions rowdata={rowdata} handleDeleteCategory={handleDeleteCategory} />
         }
     ]
 
@@ -68,7 +75,7 @@ const Categotytable = ({ numofpage }) => {
 
             <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} loading={loading}>
 
-            <Addcategory setForceRender={setForceRender} />
+                <Addcategory setForceRender={setForceRender} />
             </Table>
 
         </>

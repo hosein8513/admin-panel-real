@@ -3,7 +3,7 @@ import Categoryatr from '../Categoryatr';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Categorycontext } from '../../../layout/assets/context/categorycontext';
 
-const Actions = ({rowdata}) => {
+const Actions = ({rowdata,handleDeleteCategory}) => {
     const navigate = useNavigate()
     const params = useParams()
     const {seteditId} = useContext(Categorycontext)
@@ -21,7 +21,7 @@ const Actions = ({rowdata}) => {
             onClick={()=>seteditId(rowdata.id)}
             ></i>
             <Categoryatr/>
-            <i className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip" title="حذف دسته" data-bs-toggle="tooltip" data-bs-placement="top"></i>  
+            <i className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip" title="حذف دسته" data-bs-toggle="tooltip" data-bs-placement="top"onClick={()=>{handleDeleteCategory(rowdata)}}></i>  
         </>
     );
 };
