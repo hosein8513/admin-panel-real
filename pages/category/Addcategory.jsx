@@ -55,17 +55,17 @@ const Addcategory = ({ setForceRender }) => {
         handlegetcategoryparent()
     }, [])
     useEffect(() => {
-        if(editcategory){
+        if (editcategory) {
             setreini({
-                parent_id:editcategory.parent_id || '',
-                title:editcategory.title,
-                description:editcategory.description,
-                image:null,
-                is_active:editcategory.is_active?true:false,
-                show_in_menu:editcategory.show_in_menu?true:false
+                parent_id: editcategory.parent_id || '',
+                title: editcategory.title,
+                description: editcategory.description,
+                image: null,
+                is_active: editcategory.is_active ? true : false,
+                show_in_menu: editcategory.show_in_menu ? true : false
             })
         }
-       else if (params.categoryId) {
+        else if (params.categoryId) {
             setreini({
                 ...initialvalue,
                 parent_id: params.categoryId
@@ -73,7 +73,7 @@ const Addcategory = ({ setForceRender }) => {
         } else {
             setreini(null)
         }
-    }, [params.categoryId,editcategory])
+    }, [params.categoryId, editcategory])
     return (
         <>
             <button className="btn btn-success d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#add_product_category_modal"
@@ -85,12 +85,12 @@ const Addcategory = ({ setForceRender }) => {
             <Modals
                 fullscreen={true}
                 id="add_product_category_modal"
-                title={editId?'ویرایش:'+(editcategory?editcategory.title:''):'افزودن دسته محصولات'}
+                title={editId ? 'ویرایش:' + (editcategory ? editcategory.title : '') : 'افزودن دسته محصولات'}
             >
                 <Formik
                     enableReinitialize
                     initialValues={reini || initialvalue}
-                    onSubmit={(values, action) => onsubmit(values, action, setForceRender,editId)
+                    onSubmit={(values, action) => onsubmit(values, action, setForceRender, editId)
                     }
                     validationSchema={validationschema}
                 >
@@ -121,14 +121,14 @@ const Addcategory = ({ setForceRender }) => {
                                     placeholder='توضیحات'
 
                                 />
-                               {!editId?
-                                <Formikcontrol
-                                    className='clo-mg-6 col-lg-8'
-                                    control='file'
-                                    name='image'
-                                    label='تصویر'
-                                    placeholder='تصویر'
-                                />:null}
+                                {!editId ?
+                                    <Formikcontrol
+                                        className='clo-mg-6 col-lg-8'
+                                        control='file'
+                                        name='image'
+                                        label='تصویر'
+                                        placeholder='تصویر'
+                                    /> : null}
                                 <div className="w-full col-12 col-md-6 col-lg-8 row justify-center gap-4">
                                     <div className="form-check form-switch col-5 col-md-2">
                                         <Formikcontrol

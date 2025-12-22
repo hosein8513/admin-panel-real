@@ -4,29 +4,64 @@ import Showinfilter from '../additions/Showinfilter';
 import Atraction from '../additions/Atraction';
 import Backbutton from '../../../components/Backbutton';
 import Table from '../../../components/Table';
-import { getCategoryAtr } from '../../../src/services/categoryAtr';
+import { addCtegoryAtr, getCategoryAtr } from '../../../src/services/categoryAtr';
+import { Formik , Form} from 'formik';
+import * as Yup from 'yup'
+import Formikcontrol from '../../../components/form/Formikcontrol';
+import SubmitButton from '../../../components/form/Submitbutton';
+import { SuccessAlert } from '../../../utills/Alert';
+
+const initialvalue = {
+    title: '',
+    unit: '',
+    in_filter: ''
+}
+
+const onSubmit = async(values, action,id,setdata) => {
+try{
+    values={
+        ...values,
+        in_filter:values.in_filter?1:0
+    }
+    const res = await addCtegoryAtr(id,values)
+    if(res.status == 201){
+        SuccessAlert("ویژگی با موفقیت اضافه شد")
+        setdata(old=>[...old,res.data.data])
+    }
+}catch(err){
+    console.log(err);
+    
+}
+}
+
+const validationSchema = Yup.object({
+    title: Yup.string().required('لطفا این قسمت را پر کنید').matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'فقط از حروف فارسی یا انگلیسی یا اعداد استفاده کنید'),
+    unit: Yup.string().required('لطفا این قسمت را پر کنید').matches(/^[A-Za-z0-9\u0600-\u06FF\s]+$/, 'فقط از حروف فارسی یا انگلیسی یا اعداد استفاده کنید'),
+    in_filter: Yup.boolean()
+
+})
 
 const Categoryatr = () => {
     const [data, setdata] = useState([])
     const [loading, setloading] = useState(false)
     const location = useLocation()
 
-const handlegetatr = async ()=>{
-    setloading(true)
-    try{
-        const res = await getCategoryAtr(location.state.Categorydata.id)
-        if(res.status == 200){
-            setdata(res.data.data)
+    const handlegetatr = async () => {
+        setloading(true)
+        try {
+            const res = await getCategoryAtr(location.state.Categorydata.id)
+            if (res.status == 200) {
+                setdata(res.data.data)
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setloading(false)
         }
-    }catch(error){
-        console.log(error);
-    }finally{
-        setloading(false)
     }
-}
 
     useEffect(() => {
-       handlegetatr()
+        handlegetatr()
 
     }, [])
 
@@ -61,29 +96,48 @@ const handlegetatr = async ()=>{
                     {location.state.Categorydata.title}
                 </span>
             </h5>
-
             <div className="container">
                 <div className="row justify-content-center">
-                    <div className="row my-3">
-                        <div className="col-12 col-md-6 col-lg-4 my-1">
-                            <input type="text" className="form-control" placeholder="عنوان ویژگی جدید" />
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-4 my-1">
-                            <input type="text" className="form-control" placeholder="واحد ویژگی جدید" />
-                        </div>
-                        <div className="col-8 col-lg-2 my-1">
-                            <div className="form-check form-switch d-flex justify-content-center align-items-center p-0 h-100">
-                                <label className="form-check-label pointer" htmlFor="flexSwitchCheckDefault">نمایش در فیلتر</label>
-                                <input className="form-check-input pointer mx-3" type="checkbox" id="flexSwitchCheckDefault" />
+                    <Formik
+                        initialValues={initialvalue}
+                        onSubmit={(values, action) => onSubmit(values, action,location.state.Categorydata.id,setdata)}
+                        validationSchema={validationSchema}
+                    >
+                        <Form>
+                            <div className="row my-3">
+                                <Formikcontrol
+                                    control='input'
+                                    type='text'
+                                    name='title'
+                                    label='عنوان'
+                                    className='col-md-6 col-lg-4 my-1'
+                                    placeholder='عنوان ویژگی جدید'
+                                />
+                                <Formikcontrol
+                                    control='input'
+                                    type='text'
+                                    name='unit'
+                                    label='واحد'
+                                    className='col-md-6 col-lg-4 my-1'
+                                    placeholder='واحد ویژگی جدید'
+                                />
+                                <div className='col-8 col-lg-2 my-1'>
+                                     <Formikcontrol
+                                    control='switch'
+                                    name='in_filter'
+                                    label='نمایش در فیلتر'
+                                />
+                                </div>
+                               
+                                <div className="col-4 col-lg-2 d-flex justify-content-center align-items-center my-1">
+                                   <SubmitButton/>
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-4 col-lg-2 d-flex justify-content-center align-items-center my-1">
-                            <i className="fas fa-check text-light bg-success rounded-circle p-2 mx-1 hoverable_text hoverable pointer has_tooltip hoverable_text" title="ثبت ویژگی" data-bs-toggle="tooltip" data-bs-placement="top"></i>
-                        </div>
-                    </div>
+                        </Form>
+                    </Formik>
                     <hr />
                     <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={3} loading={loading}>
-                        <Backbutton/>
+                        <Backbutton />
                     </Table>
                 </div>
             </div>
