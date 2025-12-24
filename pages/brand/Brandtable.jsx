@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../../components/Table';
 import Addbrand from './Addbrand';
-import Actions from '../category/additions/Actions';
 import { apiPath } from '../../src/services/httpservice';
-import { getAllBrands } from '../../src/services/brands';
+import { deleteBrand, getAllBrands } from '../../src/services/brands';
+import Actions from './addishions/Action';
+import Action from './addishions/Action';
+import { Confirm } from '../../utills/Alert';
 
 const Brandtable = () => {
     const [data, setdata] = useState([])
     const [loading, setloading] = useState(false)
+    const [editBrand,setEditBrand] = useState(null)
+    
     const datainfo = [
         { field: "id", title: "#" },
         {field:'original_name',title:'عنوان لاتین'},
@@ -27,7 +31,7 @@ const Brandtable = () => {
         },
         {
             title: "عملیات",
-            elements: (rowdata) => <Actions rowdata={rowdata} />
+            elements: (rowdata) => <Action rowdata={rowdata} setEditBrand={setEditBrand} handledeletebrand={handledeletebrand}/>
         }
     ]
     const handlegetbrands = async () => {
@@ -38,13 +42,21 @@ const Brandtable = () => {
             setdata(res.data.data)
         }
     }
+    const handledeletebrand = async(brand)=>{
+        if(await Confirm('با موفقیت حذف شد',`برند ${brand.original_name}با موفقیت حذف شد`)){
+            const res = await deleteBrand(brand.id)
+            if(res.status == 200){
+                setdata((last)=>last.filter((d)=>d.id != brand.id))
+            }
+        }
+    }
 useEffect(()=>{
     handlegetbrands()
 },[])
     return (
         <>
             <Table datainfo={datainfo} searchparams={searchparams} additionalfield={additionalfield} numofpage={3} data={data} loading={loading}>
-                <Addbrand setdata={setdata} />
+                <Addbrand setdata={setdata} editBrand={editBrand}setEditBrand={setEditBrand}/>
             </Table>
         </>
     );
