@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Atraction = ({rowdata}) => {
+const Atraction = ({rowdata,editAtr,setEditAtr}) => {
     return (
         <>
             <i className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip" title="ویرایش ویژگی" 
-            ></i>
+            onClick={()=>setEditAtr(rowdata)}></i>
           <i className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip" title="حذف ویژگی" ></i>
 
             </>

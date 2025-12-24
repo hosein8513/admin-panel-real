@@ -4,8 +4,8 @@ import Showinfilter from '../additions/Showinfilter';
 import Atraction from '../additions/Atraction';
 import Backbutton from '../../../components/Backbutton';
 import Table from '../../../components/Table';
-import { addCtegoryAtr, getCategoryAtr } from '../../../src/services/categoryAtr';
-import { Formik , Form} from 'formik';
+import { addCtegoryAtr, editCategoryAtr, getCategoryAtr } from '../../../src/services/categoryAtr';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup'
 import Formikcontrol from '../../../components/form/Formikcontrol';
 import SubmitButton from '../../../components/form/Submitbutton';
@@ -17,21 +17,35 @@ const initialvalue = {
     in_filter: ''
 }
 
-const onSubmit = async(values, action,id,setdata) => {
-try{
-    values={
-        ...values,
-        in_filter:values.in_filter?1:0
+const onSubmit = async (values, action, id, setdata, editAtr, setEditAtr) => {
+    try {
+        values = {
+            ...values,
+            in_filter: values.in_filter ? 1 : 0
+        }
+        if (editAtr) {
+            const res = await editCategoryAtr(editAtr.id, values)
+            if (res.status == 200) {
+                setdata((old) => {
+                    const newData = [...old]
+                    const index = newData.findIndex((d) => d.id === editAtr.id)
+                    newData[index] = res.data.data
+                    return newData
+                })
+                SuccessAlert("ویژگی با موفقیت ویرایش شد")
+                setEditAtr(null)
+            }
+        } else {
+            const res = await addCtegoryAtr(id, values)
+            if (res.status == 201) {
+                SuccessAlert("ویژگی با موفقیت اضافه شد")
+                setdata((old) => [...old, res.data.data])
+            }
+        }
+    } catch (err) {
+        console.log(err);
+
     }
-    const res = await addCtegoryAtr(id,values)
-    if(res.status == 201){
-        SuccessAlert("ویژگی با موفقیت اضافه شد")
-        setdata(old=>[...old,res.data.data])
-    }
-}catch(err){
-    console.log(err);
-    
-}
 }
 
 const validationSchema = Yup.object({
@@ -45,7 +59,8 @@ const Categoryatr = () => {
     const [data, setdata] = useState([])
     const [loading, setloading] = useState(false)
     const location = useLocation()
-
+    const [editAtr, setEditAtr] = useState(null)
+    const [reIni, setReIni] = useState(null)
     const handlegetatr = async () => {
         setloading(true)
         try {
@@ -64,6 +79,17 @@ const Categoryatr = () => {
         handlegetatr()
 
     }, [])
+    useEffect(() => {
+        if (editAtr) setReIni({
+            title: editAtr.title,
+            unit: editAtr.unit,
+            in_filter: editAtr.in_filter ? true : false
+
+        })
+        else {
+            setReIni(null)
+        }
+    }, [editAtr])
 
     const datainfo = [
         { field: "id", title: "#" },
@@ -83,7 +109,7 @@ const Categoryatr = () => {
         },
         {
             title: "عملیات",
-            elements: (rowdata) => <Atraction rowdata={rowdata} />
+            elements: (rowdata) => <Atraction rowdata={rowdata} editAtr={editAtr} setEditAtr={setEditAtr} />
         }
     ]
 
@@ -99,9 +125,10 @@ const Categoryatr = () => {
             <div className="container">
                 <div className="row justify-content-center">
                     <Formik
-                        initialValues={initialvalue}
-                        onSubmit={(values, action) => onSubmit(values, action,location.state.Categorydata.id,setdata)}
+                        initialValues={reIni || initialvalue}
+                        onSubmit={(values, action) => onSubmit(values, action, location.state.Categorydata.id, setdata, editAtr, setEditAtr)}
                         validationSchema={validationSchema}
+                        enableReinitialize
                     >
                         <Form>
                             <div className="row my-3">
@@ -122,15 +149,18 @@ const Categoryatr = () => {
                                     placeholder='واحد ویژگی جدید'
                                 />
                                 <div className='col-8 col-lg-2 my-1'>
-                                     <Formikcontrol
-                                    control='switch'
-                                    name='in_filter'
-                                    label='نمایش در فیلتر'
-                                />
+                                    <Formikcontrol
+                                        control='switch'
+                                        name='in_filter'
+                                        label='نمایش در فیلتر'
+                                    />
                                 </div>
-                               
+
                                 <div className="col-4 col-lg-2 d-flex justify-content-center align-items-center my-1">
-                                   <SubmitButton/>
+                                    <SubmitButton />
+                                    {editAtr ? (
+                                        <button className='bny btn-sm btn-secondary me-2' onClick={() => setEditAtr(null)}>انصراف</button>
+                                    ) : null}
                                 </div>
                             </div>
                         </Form>
