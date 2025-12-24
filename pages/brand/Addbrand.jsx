@@ -1,55 +1,65 @@
 import React from 'react';
 import Modals from '../../components/Modals';
+import { Form, Formik } from 'formik';
+import Formikcontrol from '../../components/form/Formikcontrol';
+import SubmitButton from '../../components/form/Submitbutton';
+import { initialValues, onSubmit, validationSchema } from './core';
 
-const Addbrand = () => {
+const Addbrand = ({setdata}) => {
     return (
         <>
             <button className="btn btn-success d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#add_brand_modal">
-                        <i className="fas fa-plus text-light"></i>
-                    </button>
-        <Modals
-            fullscreen={false}
-            id={"add_brand_modal"}
-            title={"افزودن برند"}
-        >
-            <div className="container">
-                <div className="row justify-content-center">
-                    <div className="col-12">
-                        <div className="input-group my-3 dir_ltr">
-                            <input type="text" className="form-control" placeholder="کیبرد را در حالت لاتین قرار دهید" />
-                            <span className="input-group-text w_8rem justify-content-center">عنوان لاتیتن برند</span>
-                        </div>
-                    </div>
-                    <div className="col-12">
-                        <div className="input-group my-3 dir_ltr">
-                            <input type="text" className="form-control" placeholder="کیبرد را در حالت فارسی قرار دهید" />
-                            <span className="input-group-text w_8rem justify-content-center">عنوان فارسی برند</span>
-                        </div>
-                    </div>
-                    <div className="col-12">
-                        <div className="input-group my-3 dir_ltr">
-                            <input type="text" className="form-control" placeholder="متن کوتاه در مورد برند" />
-                            <span className="input-group-text w_8rem justify-content-center">توضیحات برند</span>
-                        </div>
-                    </div>
-                    <div className="col-12">
-                        <div className="input-group mb-3 dir_ltr">
-                            <input type="file" className="form-control" placeholder="تصویر" />
-                            <span className="input-group-text w_6rem justify-content-center">تصویر</span>
-                        </div>
-                    </div>
-                    <div className="col-12">
-                        <div className="input-group mb-3 dir_ltr">
-                            <input type="text" className="form-control" placeholder="یک کلمه در مورد تصویر" />
-                            <span className="input-group-text w_6rem justify-content-center">توضیح تصویر</span>
-                        </div>
-                    </div>
-                    <div className="btn_box text-center col-12 col-md-6 col-lg-8 mt-4">
-                        <button className="btn btn-primary ">ذخیره</button>
+                <i className="fas fa-plus text-light"></i>
+            </button>
+            <Modals
+                fullscreen={false}
+                id={"add_brand_modal"}
+                title={"افزودن برند"}
+            >
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <Formik
+                        initialValues={initialValues}
+                        onSubmit={(values,actions)=>onSubmit(values,actions,setdata)
+                        }
+                        validationSchema={validationSchema}
+                        >
+                            <Form>
+                               <Formikcontrol
+                               control='input'
+                               type='text'
+                               name='original_name'
+                               label='نام لاتین'
+                               placeholder='کیبورد را در حالت لاتین قرار دهید'
+                               />
+                               <Formikcontrol
+                               control='input'
+                               type='text'
+                               name='persian_name'
+                               label='نام فارسی'
+                               placeholder='کیبورد را در حالت فارسی قرار دهید'
+                               />
+                            <Formikcontrol 
+                            control='textarea'
+                            name='descriptions'
+                            label='توضیحات'
+                            placeholder='توضیحات'
+                            />
+                                <Formikcontrol
+                                control='file'
+                                name='logo'
+                                label='تصویر'
+                                placeholder='تصویر'
+                                />
+                               
+                                <div className="btn_box text-center col-12 col-md-6 col-lg-8 mt-4">
+                                    <SubmitButton/>
+                                </div>
+                            </Form>
+                        </Formik>
                     </div>
                 </div>
-            </div>
-        </Modals>
+            </Modals>
         </>
     );
 };
