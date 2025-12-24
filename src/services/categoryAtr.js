@@ -11,3 +11,7 @@ export const addCtegoryAtr = (id,data) =>{
 export const editCategoryAtr = (id,data)=>{
     return httpservice(`/admin/categories/attributes/${id}`,'put',data)
 }
+
+export const deleteCategoryAtr = (id)=>{
+    return httpservice(`/admin/categories/attributes/${id}`,'delete')
+}
