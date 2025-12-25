@@ -3,7 +3,6 @@ import Table from '../../components/Table';
 import Addbrand from './Addbrand';
 import { apiPath } from '../../src/services/httpservice';
 import { deleteBrand, getAllBrands } from '../../src/services/brands';
-import Actions from './addishions/Action';
 import Action from './addishions/Action';
 import { Confirm } from '../../utills/Alert';
 
