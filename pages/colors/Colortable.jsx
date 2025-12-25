@@ -21,6 +21,11 @@ const Colortable = () => {
     }
     const additionalfield = [
         {
+            title:'رنگ',
+            elements:(rowdata)=><div className='w-100 h-100 d-block'style={{background:rowdata.code,color:rowdata.code}}>...</div>
+        }
+        ,
+        {
             title: "عملیات",
             elements: (rowdata) => <Action rowdata={rowdata} setEditcolor={setEditcolor} handledeletecolor={handledeletecolor}/>
         }
