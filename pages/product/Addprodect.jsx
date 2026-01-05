@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Modals from '../../components/Modals';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { initialValue, onSubmit, validationSchema } from './core';
 import Formikcontrol from '../../components/form/Formikcontrol';
@@ -7,12 +6,11 @@ import { getcategoryservice } from '../../src/services/category';
 import Loader from '../../components/Loader';
 import Personalerror from '../../components/Personalerror';
 import Backbutton from '../../components/Backbutton';
-import Chips from '../../components/Chips';
+import Multiselect from '../../components/Multiselect';
 
 const Addprodect = () => {
     const [parentCategory, setparentCategory] = useState([])
     const [mainCategory, setMainCategory] = useState(null)
-    const [selectedcategory, setSelectedCategory] = useState([])
     const getParentCategory = async () => {
         const res = await getcategoryservice()
         if (res.status == 200) {
@@ -22,25 +20,7 @@ const Addprodect = () => {
         }
     }
 
-    const handleselectcategory = (value, formik) => {
-        setSelectedCategory(old => {
-            if (old.findIndex(d => d.id == value) == -1) {
-                const newData = [...old, mainCategory.filter(c => c.id == value)[0]]
 
-
-                const selectedIds = newData.map(d => d.id)
-                formik.setFieldValue('category_ids', selectedIds.join('-'))
-
-
-
-                return newData
-            } else {
-                return old
-            }
-        })
-
-    }
-    
     const hanadlesetmaincategory = async (value) => {
         setMainCategory('waiting')
         if (value > 0) {
@@ -72,39 +52,38 @@ const Addprodect = () => {
                         <div className="container">
                             <h4 className='text-center my-3'>افزودن محصول جدید</h4>
                             <div className='text-left col-12 col-md-6 col-lg-8 m-auto my-3'>
-                                <Backbutton/>
+                                <Backbutton />
                             </div>
-                          <div className="row justify-content-center">
+                            <div className="row justify-content-center">
 
-                                {parentCategory.length > 0 ?
-                                    <Formikcontrol
-                                        className='col-12 col-md-6 col-lg-8'
-                                        control='select'
-                                        options={parentCategory}
-                                        name='parent'
-                                        firstitem='دسته مورد نظر را انتخاب کنید'
-                                        handleonchange={hanadlesetmaincategory}
-                                    />
-                                    : null
-                                }
+
+                                <Formikcontrol
+                                    className='col-12 col-md-6 col-lg-8'
+                                    control='select'
+                                    options={parentCategory}
+                                    name='parent'
+                                    firstitem='دسته مورد نظر را انتخاب کنید'
+                                    handleonchange={hanadlesetmaincategory}
+                                />
+
 
                                 <div className="col-12 col-md-6 col-lg-8">
                                     {mainCategory === 'waiting' ? (
                                         <Loader size={true} color='text-primary' />
-                                    ) : mainCategory !== null ? <Formikcontrol
+                                    ) : mainCategory != null ? <Formikcontrol
                                         className='col-12 col-md-6 col-lg-8'
-                                        control='select'
+                                        control='searchableselect'
                                         options={mainCategory}
-                                        name='mainCats'
+                                        name='category_Ids'
+                                        label='دسته اصلی'
                                         firstitem='دسته مورد نظر را انتخاب کنید'
-                                        handleonchange={handleselectcategory}
-
+                                        result='string'
                                     /> : null}
 
                                     <ErrorMessage name={'category_ids'} component={Personalerror} />
 
 
-                                    <div className="input-group mb-2 dir_ltr">
+                                    {/* <div className="input-group mb-2 dir_ltr">
                                         <select type="text" className="form-control">
                                             <option value="1">انتخاب دسته محصول</option>
                                             <option value="1">دسته شماره 1</option>
@@ -112,8 +91,8 @@ const Addprodect = () => {
                                         <span className="input-group-text w_6rem justify-content-center">دسته</span>
                                     </div>
                                     <div className="col-12 col-md-6 col-lg-8">
-                                        <Chips setSelectedCategory={setSelectedCategory} formik={formik} selectedcategory={selectedcategory}/>
-                                    </div>
+                                        <Multiselect setSelectedCategory={setSelectedCategory} formik={formik} selectedcategory={selectedcategory} />
+                                    </div> */}
                                 </div>
                                 <div className="col-12 col-md-6 col-lg-8">
                                     <div className="input-group my-3 dir_ltr">
