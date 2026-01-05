@@ -4,21 +4,22 @@ import { Confirm } from '../../utills/Alert';
 import Addprodect from './Addprodect';
 import { deleteProduct, getProduct } from '../../src/services/product';
 import Action from './aditions/Action';
+import { Link } from 'react-router-dom';
 
 const Tableproduct = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchChar, setSearchChar] = useState("")
     const [currentPage, setCurrentPage] = useState(1) // صفحه حال حاضر
-    const [countOnPage, setCountOnPage] = useState(10) // تعداد محصول در هر صفحه
-    const [pageCount, setPageCount] = useState(0) // تعداد کل صفحات
+    const [countOnPage, setCountOnPage] = useState(1) // تعداد محصول در هر صفحه
+    const [pageCount, setPageCount] = useState(5) // تعداد کل صفحات
 
     const dataInfo = [
         { field: "id", title: "#" },
         {
             field: null,
             title: "گروه محصول",
-            elements: (rowData) => rowData.categories[0]?.title??'',
+            elements: (rowData) => rowData.categories[0]?.title ?? '',
         },
         {
             field: null,
@@ -79,7 +80,14 @@ const Tableproduct = () => {
                 pageCount={pageCount}
                 handleSearch={handleSearch}
             >
-                <Addprodect />
+                <Link
+                    to='/products/add_product'
+                >
+                    <span className='btn btn-success d-flex justify-center items-center'>
+                        <i className='fas fa-plus text-light'></i>
+                    </span>
+
+                </Link>
             </Tabledata>
         </>
     );

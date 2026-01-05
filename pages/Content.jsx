@@ -19,6 +19,7 @@ import Comments from './comments/Comments';
 import Logout from './auth/Logout';
 import Categorychild from './category/Categorychild';
 import Categoryatr from './category/atr/Categoryatr';
+import Addprodect from './product/Addprodect';
 
 const Content = () => {
     const { showSidebar } = useContext(Admincontext)
@@ -29,24 +30,25 @@ const Content = () => {
                 <Routes>
                     <Route path='/' element={<Dashboard />} />
                     <Route path='/categories' element={<Category />}>
-                    <Route path=':categoryId' element={<Categorychild/>}/>
+                        <Route path=':categoryId' element={<Categorychild />} />
                     </Route>
-                    <Route path='/categories/:categoryId/attributes' element={<Categoryatr/>}/>
+                    <Route path='/categories/:categoryId/attributes' element={<Categoryatr />} />
                     <Route path='/products' element={<Product />} />
+                    <Route path='/products/add_product' element={<Addprodect />} />
                     <Route path='*' element={<Dashboard />} />
                     <Route path='/colors' element={<Colors />} />
-                    <Route path='/guaratie' element={<Guarantie/>}/>
-                    <Route path='/brand' element={<Brand/>}/>
-                    <Route path='/discount' element={<Discount/>}/>
-                    <Route path='/cart' element={<Cart/>}/>
-                    <Route path='/order' element={<Order/>}/>
-                    <Route path='/delivery' element={<Delivery/>}/>
-                    <Route path='/users' element={<Users/>}/>
-                    <Route path='/roles' element={<Roles/>}/>
-                    <Route path='/permissions' element={<Permitions/>}/>
-                    <Route path='/questions' element={<Questions/>}/>
-                    <Route path='/comments' element={<Comments/>}/>
-                    <Route path='/logout' element={<Logout/>}/>
+                    <Route path='/guaratie' element={<Guarantie />} />
+                    <Route path='/brand' element={<Brand />} />
+                    <Route path='/discount' element={<Discount />} />
+                    <Route path='/cart' element={<Cart />} />
+                    <Route path='/order' element={<Order />} />
+                    <Route path='/delivery' element={<Delivery />} />
+                    <Route path='/users' element={<Users />} />
+                    <Route path='/roles' element={<Roles />} />
+                    <Route path='/permissions' element={<Permitions />} />
+                    <Route path='/questions' element={<Questions />} />
+                    <Route path='/comments' element={<Comments />} />
+                    <Route path='/logout' element={<Logout />} />
                 </Routes>
             </section>
         </div>
