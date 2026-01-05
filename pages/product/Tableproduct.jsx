@@ -5,6 +5,7 @@ import Addprodect from './Addprodect';
 import { deleteProduct, getProduct } from '../../src/services/product';
 import Action from './aditions/Action';
 import { Link } from 'react-router-dom';
+import Addbutton from '../../components/Addbutton';
 
 const Tableproduct = () => {
     const [data, setData] = useState([]);
@@ -80,14 +81,7 @@ const Tableproduct = () => {
                 pageCount={pageCount}
                 handleSearch={handleSearch}
             >
-                <Link
-                    to='/products/add_product'
-                >
-                    <span className='btn btn-success d-flex justify-center items-center'>
-                        <i className='fas fa-plus text-light'></i>
-                    </span>
-
-                </Link>
+                <Addbutton href={'/products/add_product'}/>
             </Tabledata>
         </>
     );
