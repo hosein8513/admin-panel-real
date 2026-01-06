@@ -1,29 +1,42 @@
-import { FastField, ErrorMessage, Field } from 'formik';
-import React from 'react';
-import Personalerror from '../Personalerror';
+import { ErrorMessage, FastField, Field } from "formik";
+import Personalerror from "../Personalerror";
 
-const Select = ({ options, name, label, className, firstitem, handleonchange }) => {
+const Select = ({ options, name, label, className, firstItem, handleOnchange }) => {
+    const setOptions = () => {
+        return (
+            <>
+                <option value=""> {firstItem} </option>
+                {options.map((o) => (
+                    <option key={o.id} value={o.id}> {o.value} </option>
+                ))}
+            </>
+        )
+    }
     return (
         <div className={`col-12 ${className}`}>
-            <div className='input-group mb-3 dir_ltr'>
+            <div className="input-group mb-3 dir_ltr">
                 <Field>
                     {({ form }) => {
                         return (
-                            <Field as="select" className="form-control" id={name} name={name}
-                                onChange={handleonchange ? (e) => handleonchange(e.target.value, form) : null}
-                            >
-                                <option value="">{firstitem}</option>
-                                {options.map((a) => (
-                                    <option key={a.id} value={a.id}>{a.value}</option>
-                                ))}
-                            </Field>
-
+                            <>
+                                {
+                                    handleOnchange ? (
+                                        <Field as="select" className="form-control" id={name} name={name}
+                                            onChange={(e) => handleOnchange(e.target.value, form)}
+                                        >
+                                            {setOptions()}
+                                        </Field>
+                                    ) : (
+                                        <Field as="select" className="form-control" id={name} name={name}>
+                                            {setOptions()}
+                                        </Field>
+                                    )
+                                }
+                            </>
                         )
                     }}
-
                 </Field>
-                    <span className='input-group-text w-24 justify-center'>{label}</span>
-
+                <span className="input-group-text w_6rem justify-content-center">{label}</span>
             </div>
             <ErrorMessage name={name} component={Personalerror} />
         </div>

@@ -1,3 +1,4 @@
+import { converttoFormadata } from "./convertdata"
 import httpservice from "./httpservice"
 
 export const getProduct = (page,countOnPage,searchChar)=>{
@@ -9,7 +10,9 @@ export const getProduct = (page,countOnPage,searchChar)=>{
 
 
 
-
+export const createProduct = (data)=>{
+  return httpservice('/admin/products','post',data.image?converttoFormadata(data):data)
+}
 
 
 export const deleteProduct = (productId)=>{
