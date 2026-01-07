@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto';
 import React, { useEffect } from 'react';
-import { Dashboardchart } from '../../utills/dashboardchart';
+import { Dashboardchart, destroyChart } from '../../utills/dashboardchart';
 import Card from './Card';
 import Producttable from './Producttable';
 
@@ -10,6 +10,9 @@ const Dashboard = () => {
 
         const datapoints = [0, 20, 20, 60, 60, 120, 180, 120, 125, 105, 110, 170];
         Dashboardchart(labels, datapoints)
+        return () => {
+            destroyChart() 
+        }
     }, [])
     return (
         <div id="dashboard_section" className="dashboard_section main_section">

@@ -15,6 +15,12 @@ export const createProduct = (data)=>{
 }
 
 
+export const editProduct = (id,data)=>{
+return httpservice(`/admin/products/${id}`,'put',data)
+}
+
+
+
 export const deleteProduct = (productId)=>{
   return httpservice(`/admin/products/${productId}`, "delete");
 }

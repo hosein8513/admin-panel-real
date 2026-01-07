@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Action = ({rowData,handleDeleteProduct}) => {
@@ -8,7 +7,7 @@ const Action = ({rowData,handleDeleteProduct}) => {
              <i
         className="fas fa-edit text-warning mx-1 hoverable_text pointer"
         title="ویرایش محصول"
-        onClick={()=>navigation('/products/add-product', {state:{productToEdit:rowData}})}
+        onClick={()=>navigation('/products/add_product', {state:{productToEdit:rowData}})}
       ></i>
       <i
         className="fas fa-receipt text-info mx-1 hoverable_text pointer has_tooltip"

@@ -12,7 +12,7 @@ const SearchableSelect = ({resultType, options, name, label, className, firstIte
   const [copyOptions , setCopyOptions]=useState(options);
 
 useEffect(() => {
-  setSelectedItems(Array.isArray(initialItems) ? initialItems : []);
+setSelectedItems(initialItems)
 }, [initialItems]);
 
   useEffect(()=>{

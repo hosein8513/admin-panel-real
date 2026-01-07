@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 import {
-  createProduct
+  createProduct,
+  editProduct
 } from '../../src/services/product';
 import {
   SuccessAlert
@@ -24,11 +25,19 @@ export const initialValue = {
   discount: ''
 }
 
-export const onSubmit = async (values, actions) => {
-  const res = await createProduct(values)
+export const onSubmit = async (values, actions,productToEdit) => {
+  if(productToEdit){
+    const res = await editProduct(productToEdit.id,values)
+  if (res.status == 200) {
+    SuccessAlert('عملیات با موفقیت انجام شد')
+
+  }
+  }else{
+    const res = await createProduct(values)
   if (res.status == 201) {
     SuccessAlert('عملیات با موفقیت انجام شد')
 
+  }
   }
 }
 
