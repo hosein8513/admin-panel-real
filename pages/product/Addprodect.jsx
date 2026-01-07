@@ -220,7 +220,7 @@ const [selectedGuarantee,setSelectedGuarantee] = useState([])
                                 <Formikcontrol
                                     label='توضیحات'
                                     className='col-md-6 col-lg-8'
-                                    control='textarea'
+                                    control='ckeditor'
                                     name='descriptions'
                                     placeholder='فقط از حروف و اعداد استفاده کنید'
                                 />
