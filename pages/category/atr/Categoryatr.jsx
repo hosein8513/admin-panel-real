@@ -31,15 +31,16 @@ const Categoryatr = () => {
     }
 
     const handledeleteatr = async (atr) => {
-      const confirm =  Confirm("عملیات با موفقیت انجام شد",`ویژگی ${atr.title}با موفقیت حذف شد`)
-      if(!confirm)return 
-        
-        
+
+
+
         try {
-            const res = await deleteCategoryAtr(atr.id)
+            
+            if (await Confirm("عملیات با موفقیت انجام شد", `ویژگی ${atr.title}با موفقیت حذف شد`)){
+                const res = await deleteCategoryAtr(atr.id)
             if (res.status == 200) {
                 setdata((last) => [...last].filter(d => d.id != atr.id))
-            }
+            }}
         } catch (error) {
             console.log(error.message);
 
@@ -80,7 +81,7 @@ const Categoryatr = () => {
         },
         {
             title: "عملیات",
-            elements: (rowdata) => <Atraction rowdata={rowdata} editAtr={editAtr} setEditAtr={setEditAtr} handledeleteatr={handledeleteatr}/>
+            elements: (rowdata) => <Atraction rowdata={rowdata} editAtr={editAtr} setEditAtr={setEditAtr} handledeleteatr={handledeleteatr} />
         }
     ]
 
@@ -95,13 +96,13 @@ const Categoryatr = () => {
             </h5>
             <div className="container">
                 <div className="row justify-content-center">
-                 <Addatr 
-                 reIni={reIni}
-                 editAtr={editAtr}
-                 setdata={setdata}
-                 setEditAtr={setEditAtr}
-                 location={location}
-                 />
+                    <Addatr
+                        reIni={reIni}
+                        editAtr={editAtr}
+                        setdata={setdata}
+                        setEditAtr={setEditAtr}
+                        location={location}
+                    />
                     <hr />
                     <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={3} loading={loading}>
                         <Backbutton />

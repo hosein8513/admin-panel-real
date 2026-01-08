@@ -225,7 +225,7 @@ const [selectedGuarantee,setSelectedGuarantee] = useState([])
                                     placeholder='فقط از حروف و اعداد استفاده کنید'
                                 />
 
-                                {productToEdit?(<Formikcontrol
+                                {!productToEdit?(<Formikcontrol
                                     label='تصویر'
                                     className='col-md-6 col-lg-8'
                                     control='file'
