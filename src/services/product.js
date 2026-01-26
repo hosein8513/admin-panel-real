@@ -5,7 +5,9 @@ export const getProduct = (page,countOnPage,searchChar)=>{
     return httpservice(`/admin/products?page=${page}&count=${countOnPage}&searchChar=${searchChar}`,'get')
 }
 
-
+export const getAllProductTitles = ()=>{
+  return httpservice('/admin/products/all_titles','get')
+}
 
 export const addProductAttr = (productId,data)=>{
     return httpservice(`/admin/products/${productId}/add_attr`,'post',data)

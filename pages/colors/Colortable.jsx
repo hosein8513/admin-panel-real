@@ -12,24 +12,23 @@ const Colortable = () => {
     const datainfo = [
        {field:'id',title:'#'},
        {field:'title',title:'عنوان رنگ'},
-       {field:'code',title:'کد رنگ'}
+       {field:'code',title:'کد رنگ'},
+       {field:null,
+            title:'رنگ',
+            elements:(rowdata)=><div className='w-100 h-100 d-block'style={{background:rowdata.code,color:rowdata.code}}>...</div>
+        }
+        ,
+        {field:null,
+            title: "عملیات",
+            elements: (rowdata) => <Action rowdata={rowdata} setEditcolor={setEditcolor} handledeletecolor={handledeletecolor}/>
+        }
     ]
     const searchparams = {
         title: "جستجو",
         placeholder: "قسمتی ازعنوان را وارد کنید",
         searchfield: "title"
     }
-    const additionalfield = [
-        {
-            title:'رنگ',
-            elements:(rowdata)=><div className='w-100 h-100 d-block'style={{background:rowdata.code,color:rowdata.code}}>...</div>
-        }
-        ,
-        {
-            title: "عملیات",
-            elements: (rowdata) => <Action rowdata={rowdata} setEditcolor={setEditcolor} handledeletecolor={handledeletecolor}/>
-        }
-    ]
+
  const handlegetcolor = async () => {
         setloading(true)
         const res = await getColor()
@@ -51,7 +50,7 @@ const Colortable = () => {
     },[])
     return (
         <>
-          <Table datainfo={datainfo} searchparams={searchparams} additionalfield={additionalfield} numofpage={3} data={data} loading={loading}>
+          <Table datainfo={datainfo} searchparams={searchparams} numofpage={3} data={data} loading={loading}>
             <Addcolor setdata={setdata} editColor={editColor} setEditcolor={setEditcolor}/>
           </Table>
         </>

@@ -14,19 +14,18 @@ const Guarantietable = () => {
         {field:'title',title:'عنوان گارانتی'},
         { field: "descriptions", title: "توضیحات" },
         {field:'length',title:'مدت گارانتی(به ماه)'},
-        {field:'length_unit',title:'واحد گارانتی'}
+        {field:'length_unit',title:'واحد گارانتی'},
+        {field:null,
+            title: "عملیات",
+            elements: (rowdata) => <Action rowdata={rowdata} setEditGuarantie={setEditGuarantie} handledeleteguarantie={handledeleteguarantie}/>
+        }
     ]
     const searchparams = {
         title: "جستجو",
         placeholder: "قسمتی ازعنوان را وارد کنید",
         searchfield: "title"
     }
-    const additionalfield = [
-        {
-            title: "عملیات",
-            elements: (rowdata) => <Action rowdata={rowdata} setEditGuarantie={setEditGuarantie} handledeleteguarantie={handledeleteguarantie}/>
-        }
-    ]
+    
  const handlegetguarantie = async () => {
         setloading(true)
         const res = await getGuarantie()
@@ -49,7 +48,7 @@ const Guarantietable = () => {
 
     return (
         <>
-         <Table datainfo={datainfo} searchparams={searchparams} additionalfield={additionalfield} numofpage={3} data={data} loading={loading}>
+         <Table datainfo={datainfo} searchparams={searchparams}  numofpage={3} data={data} loading={loading}>
             <Addguarantie setdata={setdata} editGuaratie={editGuaratie}
             setEditGuarantie={setEditGuarantie}/>
          </Table>

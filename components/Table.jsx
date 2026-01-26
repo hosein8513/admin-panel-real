@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Loader from './Loader';
-const Table = ({loading, data, datainfo, additionalfield,searchparams,numofpage,children}) => {
+const Table = ({loading, data, datainfo,searchparams,numofpage,children}) => {
     const [inidata, setinidata] = useState(data)
     const [pagedata, setpagedata] = useState([])
     const [currentpage, setcurrentpage] = useState(1)
@@ -56,28 +56,24 @@ const Table = ({loading, data, datainfo, additionalfield,searchparams,numofpage,
               <table className="table table-responsive text-center table-hover table-bordered ">
                 <thead className="table-secondary">
                     <tr>
-                        {datainfo.map(i => (
-                            <th key={i.field}>{i.title}</th>
-                        ))}
-                        {
-                            additionalfield ? additionalfield.map((a,index)=>(
-                                <th key={index}>{a.title}</th>
-                            )) : null
-                        }
-                    </tr>
+              {datainfo.map((i, index) => (
+                <th key={i.field || `notField__${index}`}>{i.title}</th>
+              ))}
+            </tr>
                 </thead>
                 <tbody>
-                    {pagedata.map((d, index) => (
-                        <tr key={index}>
-                            {datainfo.map(i =>
-                                <td key={i.field + "_" + index}>{d[i.field]}</td>
-                            )}
-                            {
-                            additionalfield ? additionalfield.map((a,index)=>(
-                                <th key={index}>{a.elements(d)}</th>
-                            )) : null
-                        }
-                        </tr>
+                    {pagedata.map((d) => (
+                        <tr key={d.id}>
+                {datainfo.map((i, index) =>
+                  i.field ? (
+                    <td key={i.field + "_" + d.id}>{d[i.field]}</td>
+                  ) : (
+                    <td key={d.id + "__" + i.id + "__" + index}>
+                      {i.elements(d)}
+                    </td>
+                  )
+                )}
+              </tr>
                     ))}
                 </tbody>
             </table>

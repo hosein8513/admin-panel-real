@@ -481,3 +481,6 @@ a{
 .font_1_2{
     font-size: 1.2rem;
 }
+.back-smoke{
+    background-color: rgba(0, 0, 0, 0.459) !important;
+}
