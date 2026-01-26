@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Action = () => {
+const Action = ({handleDeleteDiscount,rowData}) => {
+  const navigate = useNavigate()
     return (
         <>
            <i
@@ -8,6 +10,7 @@ const Action = () => {
         title="ویرایش کد تخفیف"
         data-bs-toggle="tooltip"
         data-bs-placement="top"
+        onClick={()=>navigate('/discount/add-discount-code',{state:{editCode:rowData}})}
       ></i>
 
       <i
@@ -15,6 +18,7 @@ const Action = () => {
         title="حذف کد تخفیف"
         data-bs-toggle="tooltip"
         data-bs-placement="top"
+        onClick={()=>handleDeleteDiscount(rowData)}
       ></i>  
         </>
     );

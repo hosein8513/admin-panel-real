@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { addNewDiscount } from '../../src/services/discount'
+import { addNewDiscount, editDiscount } from '../../src/services/discount'
 import { SuccessAlert } from '../../utills/Alert'
 import { convertFormDateToMiladi } from '../../utills/createdate'
 
@@ -12,18 +12,30 @@ export const initialValues = {
     product_ids:''
 }
 
-export const onSubmit = async (values,actions,setData)=>{
+export const onSubmit = async (values,actions,setData,editCode)=>{
  values = {
         ...values,
         expire_at: convertFormDateToMiladi(values.expire_at)
     }
+    if(editCode){
+        const res = await editDiscount(editCode.id,values)
+        if(res.status == 200){
+            SuccessAlert("عملیات با موفقیت انجام شد")
+            setData(last=>{
+                let newData = [...last]
+                let index = newData.findIndex((d)=>d.id == editCode.id)
+                newData[index] = res.data.data
+                return newData
+            })
+        }
+    }else{
     const res = await addNewDiscount(values)
 if(res.status == 201){
     SuccessAlert('عملیات با موفقیت انجام شد')
     setData(old=>[...old,res.data.data])
     actions.resetForm()
 }
-
+    }
 
 }
 

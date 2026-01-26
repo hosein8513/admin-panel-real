@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import Modals from '../../components/Modals';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { Form, Formik } from 'formik';
 import { initialValues, onSubmit, validationSchema } from './core';
 import Formikcontrol from '../../components/form/Formikcontrol';
 import SubmitButton from '../../components/form/Submitbutton';
 import { getAllProductTitles } from '../../src/services/product';
+import { createdate } from '../../utills/createdate';
 
 const Adddiscount = () => {
     const navigate = useNavigate()
     const [allproduct, setallproducts] = useState([])
-    const [editdiscount, seteditdiscount] = useState(null)
     const [selectedproducts, setselectedproducts] = useState([])
+    const [reini,setReIni] = useState(null)
+    const location = useLocation()
+    const editCode = location.state?.editCode
     const { setData } = useOutletContext()
     const handleGetAllTitles = async () => {
         const res = await getAllProductTitles()
@@ -36,8 +39,15 @@ const Adddiscount = () => {
     }
     useEffect(() => {
         handleGetAllTitles()
-        if (editdiscount) {
-            setselectedproducts(editdiscount.products.map(p => { return { id: p.id, value: p.title } }))
+        if (editCode) {
+            setselectedproducts(editCode.products.map(p => { return { id: p.id, value: p.title } }))
+            const productIds = editCode.products.map(p=>p.id).join("-")
+            setReIni({
+                ...editCode,
+                expire_at:createdate(editCode.expire_at,'jD/jM/jYYYY'),
+                for_all:editCode.for_all?true:false,
+                product_ids:productIds
+            })
         }
     }, [])
     return (
@@ -46,15 +56,16 @@ const Adddiscount = () => {
                 className='show d-block'
                 fullscreen={false}
                 id={"add_discount_modal"}
-                title={"افزودن تخفیف"}
+                title={editCode?'ویرایش کد تخفیف':"افزودن تخفیف"}
                 closeFunction={() => navigate(-1)}
             >
                 <div className="container">
                     <div className="row justify-content-center">
                         <Formik
-                            initialValues={initialValues}
-                            onSubmit={(values, actions) => onSubmit(values, actions, setData)}
+                            initialValues={ reini||initialValues}
+                            onSubmit={(values, actions) => onSubmit(values, actions, setData,editCode)}
                             validationSchema={validationSchema}
+                            enableReinitialize
                         >
                             {formik => {
                                 return (
@@ -93,7 +104,7 @@ const Adddiscount = () => {
                                                     formik={formik}
                                                     name='expire_at'
                                                     label='تاریخ انقضا'
-                                                    initialDate={editdiscount?.expire_at || undefined}
+                                                    initialDate={editCode?.expire_at || undefined}
                                                     yearsLimit={{from:10,to:10}}
                                                 />
                                             </div>
