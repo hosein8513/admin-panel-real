@@ -23,6 +23,7 @@ import Addprodect from './product/Addprodect';
 import SetAttr from './product/attr/SetAttr';
 import Gallery from './product/gallery/Gallery';
 import Adddiscount from './discount.jsx/Adddiscount';
+import Addrole from './roles/Addrole';
 
 const Content = () => {
     const { showSidebar } = useContext(Admincontext)
@@ -51,7 +52,9 @@ const Content = () => {
                     <Route path='/order' element={<Order />} />
                     <Route path='/delivery' element={<Delivery />} />
                     <Route path='/users' element={<Users />} />
-                    <Route path='/roles' element={<Roles />} />
+                    <Route path='/roles' element={<Roles />}>
+                    <Route path='add-role' element={<Addrole/>}/>
+                    </Route>
                     <Route path='/permissions' element={<Permitions />} />
                     <Route path='/questions' element={<Questions />} />
                     <Route path='/comments' element={<Comments />} />

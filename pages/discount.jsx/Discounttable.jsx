@@ -11,8 +11,6 @@ import { Confirm } from '../../utills/Alert';
 const Discounttable = () => {
   const [data, setData] = useState([])
   const [loading, setloading] = useState(false)
-  const [editCode, setEditCode] = useState(null)
-
   const dataInfo = [
     { field: 'id', title: '#' },
     { field: 'title', title: 'عنوان' },

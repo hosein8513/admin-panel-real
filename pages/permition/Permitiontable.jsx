@@ -1,48 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Table from '../../components/Table';
+import { getPermitions } from '../../src/services/users';
 
 const Permitiontable = () => {
+    const [data,setData] = useState([])
+    const [loading,setloading] = useState(false)
+    const datainfo =[
+        {field:'id',title:'#'},
+        {field:'title',title:'عنوان'},
+        {field:'description',title:'توضیحات'},
+        {field:'category',title:'عنوان دسته'},
+    ]
+     const searchparams = {
+        title: "جستجو",
+        placeholder: "قسمتی ازعنوان را وارد کنید",
+        searchfield: "description"
+    }
+    const handleGetPermitions = async()=>{
+        setloading(true)
+        const res = await getPermitions()
+        res && setloading(false)
+        if(res.status == 200){
+            setData(res.data.data)
+        }
+    }
+    useEffect(()=>{
+        handleGetPermitions()
+    },[])
     return (
         <>
-              <table className="table table-responsive text-center table-hover table-bordered">
-                <thead className="table-secondary">
-                    <tr>
-                        <th>#</th>
-                        <th>عنوان</th>
-                        <th>توضیحات</th>
-                        <th>وضعیت</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td> مجوز شماره 1</td>
-                        <td>توضیحات در مورد این مجوز که چیست و کلیات آن کدام است</td>
-                        <td>
-                            <div className="form-check form-switch d-flex justify-content-center align-items-center p-0 h-100">
-                                <label className="form-check-label pointer" htmlFor="flexSwitchCheckDefault">فعال</label>
-                                <input className="form-check-input pointer mx-3" type="checkbox" id="flexSwitchCheckDefault"/>
-                            </div> 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <nav aria-label="Page navigation example" className="d-flex justify-content-center">
-                <ul className="pagination dir_ltr">
-                    <li className="page-item">
-                    <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                    </li>
-                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item">
-                    <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                    </li>
-                </ul>
-            </nav>  
+            <Table
+            data={data}
+            datainfo={datainfo}
+            numofpage={7}
+            searchparams={searchparams}
+            loading={loading}
+            ></Table>
         </>
     );
 };

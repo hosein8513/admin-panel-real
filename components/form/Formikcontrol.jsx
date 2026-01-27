@@ -8,31 +8,34 @@ import Multiselect from '../Multiselect';
 import Searchableselect from '../Searchableselect';
 import CkEditor from './ckEditor';
 import Date from './Date';
+import Checkbox from './Checkbox';
 
 
 const Formikcontrol = (props) => {
-switch(props.control){
-    case'select':
-    return <Select {...props}/>
-    case'input':
-    return <Input {...props}/>
-    case'textarea':
-    return <Textarea {...props}/>
-    case'file':
-    return <File {...props}/>
-    case'switch':
-    return <Switch {...props}/>
-    case'multiselect':
-    return <Multiselect {...props}/>
-    case'searchableselect':
-    return <Searchableselect {...props}/>
-    case 'ckeditor':
-        return <CkEditor {...props}/>
+    switch (props.control) {
+        case 'select':
+            return <Select {...props} />
+        case 'input':
+            return <Input {...props} />
+        case 'textarea':
+            return <Textarea {...props} />
+        case 'file':
+            return <File {...props} />
+        case 'switch':
+            return <Switch {...props} />
+        case 'multiselect':
+            return <Multiselect {...props} />
+        case 'searchableselect':
+            return <Searchableselect {...props} />
+        case 'ckeditor':
+            return <CkEditor {...props} />
         case 'date':
-            return <Date {...props}/>
-    default:
-        return null
-}
+            return <Date {...props} />
+        case 'checkbox':
+            return <Checkbox {...props} />
+        default:
+            return null
+    }
 };
 
 export default Formikcontrol;
