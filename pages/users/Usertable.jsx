@@ -1,53 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Action from './addition/Action';
+import { deleteUsers, getUsers } from '../../src/services/users';
+import { Confirm } from '../../utills/Alert';
+import Tabledata from '../../components/form/Tabledata';
+import Addbutton from '../../components/Addbutton';
 
 const Usertable = () => {
+    const [data, setData] = useState([])
+    const [loading, setloading] = useState(false)
+    const [search, setsearch] = useState('')
+    const [currentpage, setcurrentpage] = useState(1)
+    const [countofpage, setcountofpage] = useState(7)
+    const [pagecount, setcount] = useState(0)
+
+    const datainfo = [
+        { field: 'id', title: '#' },
+        { field: 'user_name', title: 'نام کاربری' },
+        { field: 'first_name', title: 'نام' },
+        { field: 'last_name', title: 'نام خانوادگی' },
+        { field: 'phone', title: 'شماره تلفن' },
+        { field: 'email', title: 'ایمیل' },
+        {
+            field: null, title: 'جنسیت',
+            elements: (rowdata) => rowdata.gemder == 1 ? 'اقا' : "خانم"
+        }, {
+            field: null, title: 'عملیات',
+            elements: (rowdata) => <Action rowdata={rowdata} handleDeleteUsers={handleDeleteUsers}/>
+        }
+    ]
+    const searchparams = {
+        title: "جستجو",
+        placeholder: "قسمتی ازعنوان را وارد کنید",
+        searchfield: "user_name"
+    }
+    const handlegetUsers = async (page, count, char) => {
+        setloading(true)
+        const res = await getUsers(page, count, char)
+        res && setloading(false)
+        if (res.status == 200) {
+            setData(res.data.data.data)
+            setcount(res.data.last_page)
+        }
+    }
+
+    const handlSearch = (char) => {
+        setsearch(char)
+        handlegetUsers(1, countofpage, char)
+    }
+
+    const handleDeleteUsers = async (user) => {
+        if (await Confirm('با موفقیت حذف شد', `گارانتی ${user.title}با موفقیت حذف شد`)) {
+            const res = await deleteUsers(user.id)
+            if (res.status == 200) {
+                setData((last) => last.filter((d) => d.id != user.id))
+            }
+        }
+    }
+
+    useEffect(() => {
+        handlegetUsers(currentpage, countofpage, search)
+    }, [currentpage])
     return (
-        <>
-              <table className="table table-responsive text-center table-hover table-bordered">
-                <thead className="table-secondary">
-                    <tr>
-                        <th>#</th>
-                        <th>نام و نام خانوادگی</th>
-                        <th>موبایل</th>
-                        <th>ایمیل</th>
-                        <th>نقش </th>
-                        <th>تاریخ ثبت نام</th>
-                        <th>عملیات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>قاسم بساکی</td>
-                        <td>09110110011</td>
-                        <td>mahdicmptr@gmail.com</td>
-                        <td>کاربر</td>
-                        <td>1400/10/12</td>
-                        <td>
-                            <i className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip" title="جزئیات و ویرایش کاربر" data-bs-toggle="modal" data-bs-placement="top" data-bs-target="#add_user_modal"></i>
-                            <i className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip" title="حذف کاربر" data-bs-toggle="tooltip" data-bs-placement="top"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <nav aria-label="Page navigation example" className="d-flex justify-content-center">
-                <ul className="pagination dir_ltr">
-                    <li className="page-item">
-                    <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                    </li>
-                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item">
-                    <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                    </li>
-                </ul>
-                </nav>  
-        </>
+        <Tabledata
+            tableData={data}
+            dataInfo={datainfo}
+            searchParams={searchparams}
+            loading={loading}
+            currentPage={currentpage}
+            setCurrentPage={setcurrentpage}
+            pageCount={pagecount}
+            handleSearch={handlSearch}
+        >
+            <Addbutton href={'/users/add-user'} />
+        </Tabledata>
     );
 };
 
