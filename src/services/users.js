@@ -1,4 +1,3 @@
-import { ContextWatchdog } from "ckeditor5"
 import httpService from "./httpservice"
 
 export const getPermitions = () => {

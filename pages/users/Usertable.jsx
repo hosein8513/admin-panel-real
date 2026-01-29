@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Action from './addition/Action';
 import { deleteUsers, getUsers } from '../../src/services/users';
 import { Confirm } from '../../utills/Alert';
