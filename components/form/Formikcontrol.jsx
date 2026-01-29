@@ -6,7 +6,6 @@ import File from './File';
 import Switch from './Switch';
 import Multiselect from '../Multiselect';
 import Searchableselect from '../Searchableselect';
-import CkEditor from './ckEditor';
 import Date from './Date';
 import Checkbox from './Checkbox';
 
@@ -28,7 +27,7 @@ const Formikcontrol = (props) => {
         case 'searchableselect':
             return <Searchableselect {...props} />
         case 'ckeditor':
-            return <CkEditor {...props} />
+            return <Textarea {...props} />
         case 'date':
             return <Date {...props} />
         case 'checkbox':

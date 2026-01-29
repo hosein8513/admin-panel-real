@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Action = ({rowdata,handleDeleteUsers}) => {
+  const navigate = useNavigate()
     return (
         <>
          <i
@@ -9,6 +11,7 @@ const Action = ({rowdata,handleDeleteUsers}) => {
         data-bs-placement="top"
         data-bs-toggle="modal"
         data-bs-target="#add_user_modal"
+        onClick={()=>navigate('/users/add-user',{state:{userId:rowdata.id}})}
       ></i>
 
 

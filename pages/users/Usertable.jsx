@@ -4,13 +4,14 @@ import { deleteUsers, getUsers } from '../../src/services/users';
 import { Confirm } from '../../utills/Alert';
 import Tabledata from '../../components/form/Tabledata';
 import Addbutton from '../../components/Addbutton';
+import { Outlet } from 'react-router-dom';
 
 const Usertable = () => {
     const [data, setData] = useState([])
     const [loading, setloading] = useState(false)
     const [search, setsearch] = useState('')
     const [currentpage, setcurrentpage] = useState(1)
-    const [countofpage, setcountofpage] = useState(7)
+    const [countofpage, setcountofpage] = useState(10)
     const [pagecount, setcount] = useState(0)
 
     const datainfo = [
@@ -22,7 +23,7 @@ const Usertable = () => {
         { field: 'email', title: 'ایمیل' },
         {
             field: null, title: 'جنسیت',
-            elements: (rowdata) => rowdata.gemder == 1 ? 'اقا' : "خانم"
+            elements: (rowdata) => rowdata.gender == 1 ? 'آقا' : "خانم"
         }, {
             field: null, title: 'عملیات',
             elements: (rowdata) => <Action rowdata={rowdata} handleDeleteUsers={handleDeleteUsers}/>
@@ -49,7 +50,7 @@ const Usertable = () => {
     }
 
     const handleDeleteUsers = async (user) => {
-        if (await Confirm('با موفقیت حذف شد', `گارانتی ${user.title}با موفقیت حذف شد`)) {
+        if (await Confirm('با موفقیت حذف شد', `کاربر ${user.first_name}با موفقیت حذف شد`)) {
             const res = await deleteUsers(user.id)
             if (res.status == 200) {
                 setData((last) => last.filter((d) => d.id != user.id))
@@ -72,6 +73,7 @@ const Usertable = () => {
             handleSearch={handlSearch}
         >
             <Addbutton href={'/users/add-user'} />
+            <Outlet context={{setData}}/>
         </Tabledata>
     );
 };

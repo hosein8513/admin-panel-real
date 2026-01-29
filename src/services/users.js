@@ -1,3 +1,4 @@
+import { ContextWatchdog } from "ckeditor5"
 import httpService from "./httpservice"
 
 export const getPermitions = () => {
@@ -38,4 +39,16 @@ export const getUsers = (page,countofpage,search)=>{
 
 export const deleteUsers = (id) =>{
     return httpService(`/admin/users/${id}`,'delete')
+}
+
+export const getSingleUser = (id)=>{
+    return httpService(`/admin/users/${id}`,'get')
+}
+
+export const addUser=(data)=>{
+    return httpService('/admin/users','post',data)
+}
+
+export const editUsers = (id,data)=>{
+    return httpService(`/admin/users/${id}`,'put',data)
 }

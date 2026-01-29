@@ -1,221 +1,172 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Modals from '../../components/Modals';
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { Form, Formik } from 'formik';
+import { initailValues, onSubmit, validationSchema } from './core';
+import Formikcontrol from '../../components/form/Formikcontrol';
+import SubmitButton from '../../components/form/Submitbutton';
+import { getRoles, getSingleUser } from '../../src/services/users';
+import { createdate } from '../../utills/createdate';
 
 const Adduser = () => {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const userId = location.state?.userId
+    const {setData} = useOutletContext()
+    const[editUser,setEditUser] = useState(null)
+    const[allRoles,setAllRoles] = useState([])
+    const[selectedRoles,setSelectedRoles] = useState([])
+    const [reIni,setReIni] = useState(null)
+
+    const handleGetRoles = async() =>{
+        const res = await getRoles()
+        if(res.status == 200){
+            setAllRoles(res.data.data.map(r=>{return{id:r.id,value:r.title}}))
+        }
+    }
+
+    const handleGetUserData = async()=>{
+        const res = await getSingleUser(userId)
+        if(res.status == 200){
+            setEditUser(res.data.data)
+        }
+
+    }
+
+    useEffect(()=>{
+        handleGetRoles()
+        if(userId){
+            handleGetUserData()
+        }
+    },[])
+
+    useEffect(()=>{
+        if(editUser){
+            setSelectedRoles(editUser.roles.map(r=>{return{id:r.id,value:r.title}}))
+            const roles_id = editUser.roles.map(p=>p.id)
+            setReIni({birth_date:editUser.birth_date?createdate(editUser.birth_date,'jD/jM/jYYYY'):'',
+                roles_id,
+                password:'',
+                user_name:editUser.user_name || '',
+                first_name:editUser.first_name || '',
+                last_name:editUser.last_name || '',
+                phone:editUser.phone || '',
+                email:editUser.email || '',
+                gender:editUser.gender || 1
+            })
+        }
+    },[editUser])
     return (
         <>
-         <button className="btn btn-success d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#add_user_modal">
-                                <i className="fas fa-plus text-light"></i>
-                            </button>
-          <Modals
-          fullscreen={true}
-          id={"add_user_modal"}
-          title={"افزودن کاربر"}
-          >
-              <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1  dir_ltr">
-                                <input type="text" className="form-control" placeholder="فقط از حروف استفاده شود"/>
-                                <span className="input-group-text w_8rem justify-content-center">نام</span>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1  dir_ltr">
-                                <input type="text" className="form-control" placeholder="فقط از حروف استفاده شود"/>
-                                <span className="input-group-text w_8rem justify-content-center">نام خانوادگی</span>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1  dir_ltr">
-                                <input type="number" className="form-control" placeholder="فقط از عدد استفاده شود"/>
-                                <span className="input-group-text w_8rem justify-content-center">کد ملی</span>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1  dir_ltr">
-                                <input type="number" className="form-control" placeholder="فقط از عدد استفاده شود"/>
-                                <span className="input-group-text w_8rem justify-content-center">شماره موبایل</span>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1 dir_ltr">
-                                <input type="text" className="form-control" placeholder="فقط فرمت ایمیل (email@yourhost.com)"/>
-                                <span className="input-group-text w_8rem justify-content-center">ایمیل</span>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1  dir_ltr">
-                                <span className="input-group-text justify-content-center pointer">
-                                    <i className="fas fa-eye"></i>
-                                </span>
-                                <input type="password" className="form-control" placeholder="حد اقل 8 کارکتر"/>
-                                <span className="input-group-text w_8rem justify-content-center">رمز عبور</span>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-8 row px-0 my-3">
-                            <label>تاریخ تولد:</label>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <select className="form-control" >
-                                        <option value="">انتخاب کنید</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                    </select>
-                                    <span className="input-group-text w_8rem justify-content-center">روز</span>
-                                </div>
-                            </div>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <select className="form-control" >
-                                        <option value="">انتخاب کنید</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                    </select>
-                                    <span className="input-group-text w_8rem justify-content-center">ماه</span>
-                                </div>
-                            </div>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <select className="form-control" >
-                                        <option value="">انتخاب کنید</option>
-                                        <option value="1">1368</option>
-                                        <option value="1">1300</option>
-                                        <option value="2">1301</option>
-                                        <option value="3">1302</option>
-                                    </select>
-                                    <span className="input-group-text w_8rem justify-content-center">سال</span>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div className="col-12 col-md-6 col-lg-8 row px-0 my-3">
-                            <label>تاریخ ثبت موبایل:</label>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <select className="form-control" >
-                                        <option value="">انتخاب کنید</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                    </select>
-                                    <span className="input-group-text w_8rem justify-content-center">روز</span>
-                                </div>
-                            </div>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <select className="form-control" >
-                                        <option value="">انتخاب کنید</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                    </select>
-                                    <span className="input-group-text w_8rem justify-content-center">ماه</span>
-                                </div>
-                            </div>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <select className="form-control" >
-                                        <option value="">انتخاب کنید</option>
-                                        <option value="1">1400</option>
-                                        <option value="1">1399</option>
-                                        <option value="2">1398</option>
-                                        <option value="3">1397</option>
-                                    </select>
-                                    <span className="input-group-text w_8rem justify-content-center">سال</span>
-                                </div>
-                            </div>
-                        </div>
+            <Modals
+                className='show d-block'
+                fullscreen={true}
+                id={"add_user_modal"}
+                title={"افزودن کاربر"}
+                closeFunction={() => navigate(-1)}
+            >
+                <Formik
+                    initialValues={reIni||initailValues}
+                    onSubmit={(values, actions) => onSubmit(values, actions,setData,userId)}
+                    validationSchema={validationSchema}
+                    enableReinitialize>
+                    {formik => (
+                        <div className="container">
+                            <Form>
+                                <div className="row justify-content-center">
+                                    <Formikcontrol
+                                        className='col-md-8'
+                                        control='input'
+                                        type='text'
+                                        name='user_name'
+                                        label='نام کاربری'
+                                        placeholder='فقط از حروف فارسی یا لاتین استفاده کنید'
+                                    />
+                                    <Formikcontrol
+                                        className="col-md-8"
+                                        control="input"
+                                        type="text"
+                                        name="first_name"
+                                        label="نام "
+                                        placeholder="فقط از حروف فارسی و لاتین استفاده کنید"
+                                    />
+                                    <Formikcontrol
+                                        className="col-md-8"
+                                        control="input"
+                                        type="text"
+                                        name="last_name"
+                                        label="نام خانوادگی"
+                                        placeholder="فقط از حروف فارسی و لاتین استفاده کنید"
+                                    />
 
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1  dir_ltr">
-                                <select className="form-control" >
-                                    <option value="1">مرد</option>
-                                    <option value="1">زن</option>
-                                    <option value="2">نامشخص</option>
-                                </select>
-                                <span className="input-group-text w_8rem justify-content-center">جنسیت</span>
-                            </div>
-                        </div>
+                                    <Formikcontrol
+                                        className="col-md-8"
+                                        control="input"
+                                        type="text"
+                                        name="phone"
+                                        label="شماره موبایل"
+                                        placeholder="فقط از اعداد استفاده کنید"
+                                    />
 
-                        <div className="col-12 col-md-6 col-lg-8 row px-0 mt-3">
-                            <label>آدرس:</label>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <input type="text" className="form-control" placeholder=""/>
-                                    <span className="input-group-text w_8rem justify-content-center">کشور</span>
+                                    <Formikcontrol
+                                        className="col-md-8"
+                                        control="input"
+                                        type="text"
+                                        name="email"
+                                        label="ایمیل"
+                                        placeholder="فقط فرمت ایمیل (email@yourhost.com)"
+                                    />
+
+                                    <Formikcontrol
+                                        className="col-md-8"
+                                        control="input"
+                                        type="text"
+                                        name="password"
+                                        label="کلمه عبور"
+                                        placeholder="فقط از حروف فارسی و لاتین استفاده کنید"
+                                    />
+
+                                    <Formikcontrol
+                                        className="col-md-8"
+                                        control="date"
+                                        formik={formik}
+                                        name="birth_date"
+                                        label="تاریخ تولد"
+                                        initialDate={editUser?editUser.birth_date:undefined}
+                                        yearsLimit={{ from: 100, to: -10 }}
+                                    />
+
+                                    <Formikcontrol
+                                        className="col-md-6 col-lg-8"
+                                        control="select"
+                                        options={[{ id: 1, value: "مرد" }, { id: 0, value: "زن" }]}
+                                        name="gender"
+                                        label="جنسیت"
+                                    />
+
+                                    <Formikcontrol
+                                        label="نقش ها"
+                                        className="col-md-6 col-lg-8"
+                                        control="searchableselect"
+                                        options={allRoles}
+                                        name="roles_id"
+                                        firstItem="لطفا نقش های مورد نظر را انتخاب کنید"
+                                        resultType="array"
+                                        initialItems={selectedRoles}
+                                    />
+
+                                    <div className="btn_box text-center col-12 mt-4">
+                                        <SubmitButton />
+                                    </div>
+
                                 </div>
-                            </div>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <input type="text" className="form-control" placeholder=""/>
-                                    <span className="input-group-text w_8rem justify-content-center">استان</span>
-                                </div>
-                            </div>
-                            <div className="col-12 col-md-4">
-                                <div className="input-group my-1  dir_ltr">
-                                    <input type="text" className="form-control" placeholder=""/>
-                                    <span className="input-group-text w_8rem justify-content-center">شهر</span>
-                                </div>
-                            </div>
+                            </Form>
                         </div>
-                        <div className="col-12 col-md-6 col-lg-8 mb-3">
-                            <div className="input-group my-1  dir_ltr" >
-                                <input type="text" className="form-control" placeholder="خیابان - کوچه و ..."/>
-                                <span className="input-group-text w_8rem justify-content-center">ادامه آدرس</span>
-                            </div>
-                        </div>
+                    )}
 
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1  dir_ltr">
-                                <input type="text" className="form-control" placeholder="مثلا @qasem"/>
-                                <span className="input-group-text w_8rem justify-content-center">اینستاگرام</span>
-                            </div>
-                        </div>
-
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1  dir_ltr" >
-                                <input type="text" className="form-control" placeholder="مثلا @qasem"/>
-                                <span className="input-group-text w_8rem justify-content-center">تلگرام</span>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-8">
-                            <div className="input-group my-1 dir_ltr">
-                                <input type="file" className="form-control" placeholder="تصویر"/>
-                                <span className="input-group-text justify-content-center">تصویر</span>
-                            </div>
-                        </div>
-
-
-                        <div className="col-12 col-md-6 col-lg-8 col-md-6 col-lg-8 my-1">
-                            <div className="input-group mb-2 dir_ltr">
-                                <input type="text" className="form-control" placeholder="قسمتی از نقش مورد نظر را وارد کنید" list="roleLists"/>
-                                <span className="input-group-text w_8rem justify-content-center">نقش ها</span>
-                                <datalist id="roleLists">
-                                    <option value="نقش شماره 1"/>
-                                    <option value="نقش شماره 2"/>
-                                    <option value="نقش شماره 3"/>
-                                </datalist>
-                            </div>
-                            <div className="col-12 col-md-6 col-lg-8">
-                                <span className="chips_elem">
-                                    <i className="fas fa-times text-danger"></i>
-                                    نقش 1
-                                </span>
-                                <span className="chips_elem">
-                                    <i className="fas fa-times text-danger"></i>
-                                    نقش 2
-                                </span>
-                            </div>
-                        </div>                                             
-                        <div className="btn_box text-center col-12 col-md-6 col-lg-8 mt-4">
-                            <button className="btn btn-primary ">ذخیره</button>
-                        </div>
-                    </div>
-                </div>
-            </Modals>  
+                </Formik>
+            </Modals>
         </>
     );
 };
