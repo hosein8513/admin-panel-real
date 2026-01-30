@@ -45,11 +45,11 @@ const Content = () => {
                         <Route path=':categoryId' element={<Categorychild />} />
                     </Route>)}
 
-                    <Route path='/categories/:categoryId/attributes' element={<PerComponent component={<Categoryatr />} title={'read_category_attr'} />} />
+                    <Route path='/categories/:categoryId/attributes' element={<PerComponent component={<Categoryatr />} title={'read_category_attrs'} />} />
                     <Route path='/products' element={<PerComponent component={<Product />} title={'read_products'} />} />
-                    <Route path='/products/add_product' element={<PerComponent component={<Addprodect />} title={'create-product'} />} />
+                    <Route path='/products/add_product' element={<PerComponent component={<Addprodect />} title={'create_product'} />} />
                     <Route path='/colors' element={<PerComponent component={<Colors />} title={'read_colors'}/>} />
-                    <Route path='/guaratie' element={<PerComponent component={<Guarantie />} title={'read_guatanties'}/>} />
+                    <Route path='/guaratie' element={<PerComponent component={<Guarantie />} title={'read_guaranties'}/>} />
                     <Route path='/brand' element={<PerComponent component={<Brand />} title={'read_brands'}/>} />
                     <Route path='/products/gallery' element={<PerComponent component={<Gallery />} title={'create_product_image'}/>} />
                     <Route path='/products/set-attr' element={<PerComponent component={<SetAttr />} title={'create_product_attr'}/>} />

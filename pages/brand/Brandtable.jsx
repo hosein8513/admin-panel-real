@@ -16,23 +16,18 @@ const Brandtable = () => {
         {field:'original_name',title:'عنوان لاتین'},
         { field: "persian_name", title: "عنوان فارسی" },
         { field: "descriptions", title: "توضیحات" },
+        {field:null, title: "لوگو",
+            elements: (rowdata) =>
+                rowdata.logo ? <img src={apiPath + '/' + rowdata.logo} width='40' /> : null},
+            {field:null ,title: "عملیات",
+            elements: (rowdata) => <Action rowdata={rowdata} setEditBrand={setEditBrand} handledeletebrand={handledeletebrand}/>}
     ]
     const searchparams = {
         title: "جستجو",
         placeholder: "قسمتی ازعنوان را وارد کنید",
         searchfield: "original_name"
     }
-    const additionalfield = [
-        {
-            title: "لوگو",
-            elements: (rowdata) =>
-                rowdata.logo ? <img src={apiPath + '/' + rowdata.logo} width='40' /> : null
-        },
-        {
-            title: "عملیات",
-            elements: (rowdata) => <Action rowdata={rowdata} setEditBrand={setEditBrand} handledeletebrand={handledeletebrand}/>
-        }
-    ]
+    
     const handlegetbrands = async () => {
         setloading(true)
         const res = await getAllBrands()
@@ -54,7 +49,7 @@ useEffect(()=>{
 },[])
     return (
         <>
-            <Table datainfo={datainfo} searchparams={searchparams} additionalfield={additionalfield} numofpage={3} data={data} loading={loading}>
+            <Table datainfo={datainfo} searchparams={searchparams}  numofpage={3} data={data} loading={loading}>
                 <Addbrand setdata={setdata} editBrand={editBrand}setEditBrand={setEditBrand}/>
             </Table>
         </>
