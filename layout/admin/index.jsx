@@ -8,12 +8,12 @@ import Content from '../../pages/Content';
 import { Navigate } from 'react-router-dom';
 import { useIslogin } from '../../src/hooks/Authhook';
 import { useDispatch} from 'react-redux';
-import { getRolesAction } from '../../redux/roles/action';
+import { getUserAction } from '../../redux/user/action';
 const Index = () => {
   const [loading, login] = useIslogin()
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getRolesAction())
+    dispatch(getUserAction())
   }, [])
   return (
     <Admincontextcontainer>

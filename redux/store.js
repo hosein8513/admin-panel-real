@@ -1,7 +1,12 @@
-import { applyMiddleware, createStore } from "redux";
-import rolesReducer from "./roles/reducer";
-import { thunk } from "redux-thunk";
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./user/reducer";
 
-const store = createStore(rolesReducer,applyMiddleware(thunk))
+// const store = createStore(userReducer,applyMiddleware(thunk))
+
+const store = configureStore({
+    reducer:{
+        userReducer
+    }
+})
 
 export default store

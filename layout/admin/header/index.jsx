@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
 import { Admincontext } from '../../assets/context/admincontext';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Navber = () => {
-    const{setshowsidebar} = useContext(Admincontext)
+    const { setshowsidebar } = useContext(Admincontext)
+    const user = useSelector(state => state.userReducer.data)
+    console.log('Navber render', user)
     return (
         <nav className="navbar fixed-top navbar-dark bg-secondary top_navbar py-0">
             <div className="container-fluid h-100 pe-0">
@@ -14,7 +17,7 @@ const Navber = () => {
                     </a>
                     <div className="form-check form-switch mx-4 d-none d-md-block">
                         <input id="handle_toggle_sidemenu" className="form-check-input pointer" type="checkbox"
-                        onChange={(e)=>setshowsidebar(e.target.checked)}
+                            onChange={(e) => setshowsidebar(e.target.checked)}
                         />
                     </div>
                 </div>
@@ -23,7 +26,8 @@ const Navber = () => {
                 <div className="left_content d-flex flex-row-reverse">
                     <i className="fas fa-grip-vertical fa-2x me-3 pointer" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i>
                     <ul className="dropdown-menu mini_menu" aria-labelledby="dropdownMenuButton1">
-                        <li className="my-2"><a className="dropdown-item d-block text-center">قاسم بساکی</a></li>
+                        <li className="my-2"><a className="dropdown-item d-block text-center">{user?.first_name ?? user?.user_name ?? 'کاربر'}
+                        </a></li>
                         <li className="my-2 d-flex justify-content-center align-items-center px-2">
                             <i className="fas fa-tachometer-alt"></i>
                             <a className="dropdown-item" href="#">داشبورد</a>

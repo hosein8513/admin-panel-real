@@ -1,4 +1,5 @@
 import {
+  use,
   useEffect,
   useState
 } from "react"
@@ -6,7 +7,7 @@ import {
   getuserservice
 } from "../services/auth"
 import { useDispatch } from "react-redux"
-import { reciveRolesResponse } from "../../redux/roles/action"
+import { reciveUserResponse } from "../../redux/user/action"
 
 export const useIslogin = () => {
   const [loading, setloading] = useState(true)
@@ -17,7 +18,9 @@ export const useIslogin = () => {
       const res = await getuserservice()
       setlogin(res.status == 200 ? true : false)
       setloading(false)
-       dispatch(reciveRolesResponse(res.data.roles))
+      const user = res.data
+      user.full_name = user.first_name+' '+user.last_name
+       dispatch(reciveUserResponse(user))
     } catch (error) {
       localStorage.removeItem('localtoken')
       setlogin(false)
