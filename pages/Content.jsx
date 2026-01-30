@@ -25,43 +25,52 @@ import Gallery from './product/gallery/Gallery';
 import Adddiscount from './discount.jsx/Adddiscount';
 import Addrole from './roles/Addrole';
 import Adduser from './users/Adduser';
+import { useHasPermission } from '../src/hooks/permissionsHook';
+import PerComponent from '../components/form/PerComponent';
+
 
 const Content = () => {
     const { showSidebar } = useContext(Admincontext)
+    const categoryPermission = useHasPermission('read_categories')
+    const discountPermission = useHasPermission('read_discounts')
+    const userPermission = useHasPermission('read_users')
+    const rolePermission = useHasPermission('read_roles')
 
     return (
         <div>
             <section id="content_section" className={`bg-light py-2 px-3 ${showSidebar ? "with_sidebar" : null}`}>
                 <Routes>
                     <Route path='/' element={<Dashboard />} />
-                    <Route path='/categories' element={<Category />}>
+                    {categoryPermission && (<Route path='/categories' element={<Category />}>
                         <Route path=':categoryId' element={<Categorychild />} />
-                    </Route>
-                    <Route path='/categories/:categoryId/attributes' element={<Categoryatr />} />
-                    <Route path='/products' element={<Product />} />
-                    <Route path='/products/add_product' element={<Addprodect />} />
-                    <Route path='*' element={<Dashboard />} />
-                    <Route path='/colors' element={<Colors />} />
-                    <Route path='/guaratie' element={<Guarantie />} />
-                    <Route path='/brand' element={<Brand />} />
-                    <Route path='/products/gallery' element={<Gallery/>}/>
-                    <Route path='/products/set-attr' element={<SetAttr/>}/>
-                    <Route path='/discount' element={<Discount />} >
-                    <Route path='/discount/add-discount-code' element={<Adddiscount/>}/>
-                    </Route>
+                    </Route>)}
+
+                    <Route path='/categories/:categoryId/attributes' element={<PerComponent component={<Categoryatr />} title={'read_category_attr'} />} />
+                    <Route path='/products' element={<PerComponent component={<Product />} title={'read_products'} />} />
+                    <Route path='/products/add_product' element={<PerComponent component={<Addprodect />} title={'create-product'} />} />
+                    <Route path='/colors' element={<PerComponent component={<Colors />} title={'read_colors'}/>} />
+                    <Route path='/guaratie' element={<PerComponent component={<Guarantie />} title={'read_guatanties'}/>} />
+                    <Route path='/brand' element={<PerComponent component={<Brand />} title={'read_brands'}/>} />
+                    <Route path='/products/gallery' element={<PerComponent component={<Gallery />} title={'create_product_image'}/>} />
+                    <Route path='/products/set-attr' element={<PerComponent component={<SetAttr />} title={'create_product_attr'}/>} />
+                   {discountPermission&&( <Route path='/discount' element={<Discount />} >
+                        <Route path='/discount/add-discount-code' element={<PerComponent component={<Adddiscount />} title={'create_discount'}/>} />
+                    </Route>)}
                     <Route path='/cart' element={<Cart />} />
                     <Route path='/order' element={<Order />} />
                     <Route path='/delivery' element={<Delivery />} />
-                    <Route path='/users' element={<Users />}>
-                    <Route path='/users/add-user' element={<Adduser/>}/>
-                    </Route>
-                    <Route path='/roles' element={<Roles />}>
-                    <Route path='add-role' element={<Addrole/>}/>
-                    </Route>
-                    <Route path='/permissions' element={<Permitions />} />
+                  {userPermission&&(  <Route path='/users' element={<Users />}>
+                        <Route path='/users/add-user' element={<PerComponent component={<Adduser />}title={'create_user'}/>} />
+                    </Route>)}
+                   {rolePermission&&( <Route path='/roles' element={<Roles />}>
+                        <Route path='add-role' element={<PerComponent component={<Addrole />}title={'create_role'}/>} />
+                    </Route>)}
+                    <Route path='/permissions' element={<PerComponent component={<Permitions />} title={'read_permissions'}/>} />
                     <Route path='/questions' element={<Questions />} />
                     <Route path='/comments' element={<Comments />} />
                     <Route path='/logout' element={<Logout />} />
+
+                    <Route path='*' element={<Dashboard />} />
                 </Routes>
             </section>
         </div>

@@ -31,36 +31,28 @@ const Categotytable = ({ numofpage }) => {
         }
     }
 
-    const handleDeleteCategory = (rowdata) => {
-        Confirm("حذف شد", `دسته بندی ${rowdata.title} با موفقیت حذف شد!`)
-        deleteCategory(rowdata.id)
-        setdata(data.filter(d=>d.id != rowdata.id))
+    const handleDeleteCategory =async (rowdata) => {
+       if(await Confirm("حذف شد", `دسته بندی ${rowdata.title} با موفقیت حذف شد!`)){ 
+       const res = await deleteCategory(rowdata.id)
+       if(res.status == 200){
+        setdata(data.filter(d=>d.id != rowdata.id))}
+    }
     }
     useEffect(() => {
-        console.log(params);
-
         handlegetcategories()
     }, [params, forceRender])
 
-    const additionalfield = [
-        {
-            title: "تاریخ",
-            elements: (rowdata) => createdate(rowdata.create_at)
-        },
-        {
-            title: "نمایش در منو",
-            elements: (rowdata) => <Showinmenu rowdata={rowdata} />
-        },
-        {
-            title: "عملیات",
-            elements: (rowdata) => <Actions rowdata={rowdata} handleDeleteCategory={handleDeleteCategory} />
-        }
-    ]
 
     const datainfo = [
         { field: "id", title: "#" },
         { field: "title", title: "نام محصول" },
         { field: "parent_id", title: " والد" },
+        {field:null, title: "تاریخ",
+            elements: (rowdata) => createdate(rowdata.create_at)},
+        {field:null, title: "نمایش در منو",
+            elements: (rowdata) => <Showinmenu rowdata={rowdata} />},
+        {field:null, title: "عملیات",
+            elements: (rowdata) => <Actions rowdata={rowdata} handleDeleteCategory={handleDeleteCategory} />},
     ]
     const searchparams = {
         title: "جستجو",
@@ -73,7 +65,7 @@ const Categotytable = ({ numofpage }) => {
             <Outlet />
 
 
-            <Table data={data} datainfo={datainfo} additionalfield={additionalfield} searchparams={searchparams} numofpage={numofpage} elements={elements} loading={loading}>
+            <Table data={data} datainfo={datainfo}  searchparams={searchparams} numofpage={numofpage} elements={elements} loading={loading}>
 
                 <Addcategory setForceRender={setForceRender} />
             </Table>

@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 const Navber = () => {
     const { setshowsidebar } = useContext(Admincontext)
     const user = useSelector(state => state.userReducer.data)
-    console.log('Navber render', user)
     return (
         <nav className="navbar fixed-top navbar-dark bg-secondary top_navbar py-0">
             <div className="container-fluid h-100 pe-0">
