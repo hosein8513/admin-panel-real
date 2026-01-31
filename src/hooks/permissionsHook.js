@@ -1,24 +1,39 @@
-import {
-    useSelector
-} from "react-redux"
+import { useSelector } from "react-redux"
 
-export const useHasPermission = (title) => {
-    const user = useSelector(state => state.userReducer.data)
-    const roles = user?.roles ||[]
-    let permissions = []
-    for (const role of roles) {
-        permissions = [...permissions, ...role.permissions]
+export const useHasPermission = (permission) => {
+  const { data: user, loading } = useSelector(state => state.userReducer)
+
+  if (loading) {
+    return {
+      allowed: false,
+      loading: true
     }
-    const isAdmin = roles.findIndex(r=>r.title === 'admin') >-1
+  }
 
-    return isAdmin || (typeof(title)=='object'?hasOneOfPer(permissions,title):permissions.findIndex(p => p.title.includes(title)) > -1)
+  if (!user) {
+    return {
+      allowed: false,
+      loading: false
+    }
+  }
 
+  const roles = user.roles ?? []
+  const permissions = roles.flatMap(r => r.permissions ?? [])
+  const isAdmin = roles.some(r => r.title === 'admin')
+
+  if (isAdmin) {
+    return {
+      allowed: true,
+      loading: false
+    }
+  }
+
+  const allowed = Array.isArray(permission)
+    ? permission.some(p => permissions.some(x => x.title === p))
+    : permissions.some(x => x.title === permission)
+
+  return {
+    allowed,
+    loading: false
+  }
 }
-
-const hasOneOfPer = (permissions,titles)=>{
-    for(const title of titles){
-        if(permissions.findIndex(p=>p.title.includes(title))>-1)return true
-    }
-    return false
-    
-    }

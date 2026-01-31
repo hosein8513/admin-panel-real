@@ -34,7 +34,7 @@ const Sidebar = () => {
                         <Sidebaritem targetpath="/cart" title="مدیریت سبد ها" icon="fas fa-shopping-basket" pTitle="read_carts"/>
 
                         <Sidebaritem targetpath="/order" title="مدیریت سفارشات" icon="fas fa-luggage-cart"  pTitle="read_orders"/>
-                        <Sidebaritem targetpath="/delivery" title="مدیریت نحوه ارسال" icon="fas fa-truck-loading"  pTitle="read_deliveries"/>
+                        <Sidebaritem targetpath="/deliveries" title="مدیریت نحوه ارسال" icon="fas fa-truck-loading"  pTitle="read_deliveries"/>
 
 
 

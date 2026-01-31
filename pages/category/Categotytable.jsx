@@ -8,12 +8,14 @@ import { Outlet, useParams } from 'react-router-dom';
 import { createdate } from '../../utills/createdate';
 import Addcategory from './Addcategory';
 import { Confirm } from '../../utills/Alert';
+import { useHasPermission } from '../../src/hooks/permissionsHook';
 
 const Categotytable = ({ numofpage }) => {
     const params = useParams()
     const [data, setdata] = useState([])
     const [loading, setloading] = useState(false)
     const [forceRender, setForceRender] = useState(0)
+    const hasPerToAdd = useHasPermission('create_category')
     const handlegetcategories = async () => {
         setloading(true)
         try {
@@ -67,7 +69,7 @@ const Categotytable = ({ numofpage }) => {
 
             <Table data={data} datainfo={datainfo}  searchparams={searchparams} numofpage={numofpage} elements={elements} loading={loading}>
 
-                <Addcategory setForceRender={setForceRender} />
+                {hasPerToAdd && <Addcategory setForceRender={setForceRender} />}
             </Table>
 
         </>

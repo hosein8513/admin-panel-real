@@ -27,6 +27,7 @@ import Addrole from './roles/Addrole';
 import Adduser from './users/Adduser';
 import { useHasPermission } from '../src/hooks/permissionsHook';
 import PerComponent from '../components/form/PerComponent';
+import Adddelivery from './delivery/Adddelivery';
 
 
 const Content = () => {
@@ -35,7 +36,7 @@ const Content = () => {
     const discountPermission = useHasPermission('read_discounts')
     const userPermission = useHasPermission('read_users')
     const rolePermission = useHasPermission('read_roles')
-
+const deliveryPermission = useHasPermission('read_deliveries')
     return (
         <div>
             <section id="content_section" className={`bg-light py-2 px-3 ${showSidebar ? "with_sidebar" : null}`}>
@@ -58,7 +59,9 @@ const Content = () => {
                     </Route>)}
                     <Route path='/cart' element={<Cart />} />
                     <Route path='/order' element={<Order />} />
-                    <Route path='/delivery' element={<Delivery />} />
+                    {deliveryPermission && (<Route path='/deliveries' element={<Delivery/>}>
+                    <Route path='add-delivery' element={<PerComponent component={<Adddelivery/>} title={'create_delivery'}/>}/>
+                    </Route>)}
                   {userPermission&&(  <Route path='/users' element={<Users />}>
                         <Route path='/users/add-user' element={<PerComponent component={<Adduser />}title={'create_user'}/>} />
                     </Route>)}
