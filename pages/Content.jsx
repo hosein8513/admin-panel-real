@@ -28,6 +28,7 @@ import Adduser from './users/Adduser';
 import { useHasPermission } from '../src/hooks/permissionsHook';
 import PerComponent from '../components/form/PerComponent';
 import Adddelivery from './delivery/Adddelivery';
+import Editcart from './cart/Editcart';
 
 
 const Content = () => {
@@ -36,7 +37,8 @@ const Content = () => {
     const discountPermission = useHasPermission('read_discounts')
     const userPermission = useHasPermission('read_users')
     const rolePermission = useHasPermission('read_roles')
-const deliveryPermission = useHasPermission('read_deliveries')
+    const deliveryPermission = useHasPermission('read_deliveries')
+    const cartPermission = useHasPermission('read_carts')
     return (
         <div>
             <section id="content_section" className={`bg-light py-2 px-3 ${showSidebar ? "with_sidebar" : null}`}>
@@ -49,26 +51,28 @@ const deliveryPermission = useHasPermission('read_deliveries')
                     <Route path='/categories/:categoryId/attributes' element={<PerComponent component={<Categoryatr />} title={'read_category_attrs'} />} />
                     <Route path='/products' element={<PerComponent component={<Product />} title={'read_products'} />} />
                     <Route path='/products/add_product' element={<PerComponent component={<Addprodect />} title={'create_product'} />} />
-                    <Route path='/colors' element={<PerComponent component={<Colors />} title={'read_colors'}/>} />
-                    <Route path='/guaratie' element={<PerComponent component={<Guarantie />} title={'read_guaranties'}/>} />
-                    <Route path='/brand' element={<PerComponent component={<Brand />} title={'read_brands'}/>} />
-                    <Route path='/products/gallery' element={<PerComponent component={<Gallery />} title={'create_product_image'}/>} />
-                    <Route path='/products/set-attr' element={<PerComponent component={<SetAttr />} title={'create_product_attr'}/>} />
-                   {discountPermission&&( <Route path='/discount' element={<Discount />} >
-                        <Route path='/discount/add-discount-code' element={<PerComponent component={<Adddiscount />} title={'create_discount'}/>} />
+                    <Route path='/colors' element={<PerComponent component={<Colors />} title={'read_colors'} />} />
+                    <Route path='/guaratie' element={<PerComponent component={<Guarantie />} title={'read_guaranties'} />} />
+                    <Route path='/brand' element={<PerComponent component={<Brand />} title={'read_brands'} />} />
+                    <Route path='/products/gallery' element={<PerComponent component={<Gallery />} title={'create_product_image'} />} />
+                    <Route path='/products/set-attr' element={<PerComponent component={<SetAttr />} title={'create_product_attr'} />} />
+                    {discountPermission && (<Route path='/discount' element={<Discount />} >
+                        <Route path='/discount/add-discount-code' element={<PerComponent component={<Adddiscount />} title={'create_discount'} />} />
                     </Route>)}
-                    <Route path='/cart' element={<Cart />} />
+                    {cartPermission && (<Route path='/cart' element={<Cart />} >
+                        <Route path='add-cart' element={<PerComponent component={<Editcart />} title={'create-cart'} />} />
+                    </Route>)}
                     <Route path='/order' element={<Order />} />
-                    {deliveryPermission && (<Route path='/deliveries' element={<Delivery/>}>
-                    <Route path='add-delivery' element={<PerComponent component={<Adddelivery/>} title={'create_delivery'}/>}/>
+                    {deliveryPermission && (<Route path='/deliveries' element={<Delivery />}>
+                        <Route path='add-delivery' element={<PerComponent component={<Adddelivery />} title={'create_delivery'} />} />
                     </Route>)}
-                  {userPermission&&(  <Route path='/users' element={<Users />}>
-                        <Route path='/users/add-user' element={<PerComponent component={<Adduser />}title={'create_user'}/>} />
+                    {userPermission && (<Route path='/users' element={<Users />}>
+                        <Route path='/users/add-user' element={<PerComponent component={<Adduser />} title={'create_user'} />} />
                     </Route>)}
-                   {rolePermission&&( <Route path='/roles' element={<Roles />}>
-                        <Route path='add-role' element={<PerComponent component={<Addrole />}title={'create_role'}/>} />
+                    {rolePermission && (<Route path='/roles' element={<Roles />}>
+                        <Route path='add-role' element={<PerComponent component={<Addrole />} title={'create_role'} />} />
                     </Route>)}
-                    <Route path='/permissions' element={<PerComponent component={<Permitions />} title={'read_permissions'}/>} />
+                    <Route path='/permissions' element={<PerComponent component={<Permitions />} title={'read_permissions'} />} />
                     <Route path='/questions' element={<Questions />} />
                     <Route path='/comments' element={<Comments />} />
                     <Route path='/logout' element={<Logout />} />

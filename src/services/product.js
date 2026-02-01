@@ -41,3 +41,7 @@ export const setMainProductImage = (imageId)=>{
 export const deleteProductImage = (imageId)=>{
   return httpservice(`/admin/products/gallery/${imageId}`, 'delete')
 }
+
+export const getOneProduct = (id)=>{
+  return httpservice(`/admin/products/${id}`,'get')
+}
