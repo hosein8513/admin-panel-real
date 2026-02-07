@@ -484,3 +484,7 @@ a{
 .back-smoke{
     background-color: rgba(0, 0, 0, 0.459) !important;
 }
+
+.pad{
+    padding: 0 !important;
+}

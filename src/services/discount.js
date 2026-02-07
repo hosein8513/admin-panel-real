@@ -15,3 +15,7 @@ export const editDiscount = (id,data)=>{
 export const deleteDiscount = (id)=>{
     return httpservice(`/admin/discounts/${id}`,'delete')
 }
+
+export const getOneDiscount = (id)=>{
+    return httpservice(`/admin/discounts/${id}`,'get')
+}

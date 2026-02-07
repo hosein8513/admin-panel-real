@@ -26,6 +26,6 @@ export const validationSchema = Yup.object().shape({
     user_id : Yup.number().typeError("فقط عدد وارد کنید").required("لطفا این قسمت را پر کنید"),
     product_id : Yup.number().typeError("فقط عدد وارد کنید").required("لطفا این قسمت را پر کنید"),
     color_id : Yup.number().typeError("فقط عدد وارد کنید"),
-    guarantee_id : Yup.number().typeError("فقط عدد وارد کنید"),
+    // guarantee_id : Yup.number().typeError("فقط عدد وارد کنید"),
     count : Yup.number().typeError("فقط عدد وارد کنید").required("لطفا این قسمت را پر کنید"),
 })

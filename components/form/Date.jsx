@@ -18,7 +18,7 @@ const months = [
     {id: 12 , value: "اسفند"},
 ]
 
-const Date = ({formik,name,label,yearsLimit, initialDate,className}) => {
+const Date = ({formik,name,label,yearsLimit, initialDate, className, placeholder}) => {
 
     const [day , setDay] = useState();
     const [month , setMonth] = useState();
@@ -57,13 +57,15 @@ const Date = ({formik,name,label,yearsLimit, initialDate,className}) => {
         <div className={`validate-input form_date_picker ${className}`} >
 
             <div className="input-group mb-3 dir_ltr pointer" onClick={handleShowDateConfig}>
-                <FastField type="text" name={name} className="form-control pointer" placeholder={'جهت انتخاب تاریخ کلیک کنید'} disabled/>
-                <span className="input-group-text w_6rem justify-content-center"> {label} </span>
+                <FastField type="text" name={name} className="form-control pointer" placeholder={placeholder || 'جهت انتخاب تاریخ کلیک کنید'} disabled/>
+                {label && (
+                    <span className="input-group-text w_6rem justify-content-center"> {label} </span>
+                )}
             </div>
             
             {
                 showConfig ? (
-                    <div className='datePicker row w-[500px] m-0 p-0'>
+                    <div className='datePicker row w-100 m-0 p-0'>
                         <div className='col-3 d-flex justify-content-center align-items-center  p-0'>
                             <select className='form-select' value={day} onChange={(e)=>setDay(e.target.value)}>
                                 {days.map(d=>(

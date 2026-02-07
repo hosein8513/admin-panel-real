@@ -29,6 +29,7 @@ import { useHasPermission } from '../src/hooks/permissionsHook';
 import PerComponent from '../components/form/PerComponent';
 import Adddelivery from './delivery/Adddelivery';
 import Editcart from './cart/Editcart';
+import Addorder from './order/Addorder';
 
 
 const Content = () => {
@@ -39,6 +40,7 @@ const Content = () => {
     const rolePermission = useHasPermission('read_roles')
     const deliveryPermission = useHasPermission('read_deliveries')
     const cartPermission = useHasPermission('read_carts')
+    const orderPermission = useHasPermission('read_orders')
     return (
         <div>
             <section id="content_section" className={`bg-light py-2 px-3 ${showSidebar ? "with_sidebar" : null}`}>
@@ -62,7 +64,9 @@ const Content = () => {
                     {cartPermission && (<Route path='/cart' element={<Cart />} >
                         <Route path='add-cart' element={<PerComponent component={<Editcart />} title={'create-cart'} />} />
                     </Route>)}
-                    <Route path='/order' element={<Order />} />
+                   {orderPermission &&( <Route path='/order' element={<Order />}>
+                    <Route path='add-order' element={<PerComponent component={<Addorder/>} title={'create_order'}/>}/>
+                    </Route>)}
                     {deliveryPermission && (<Route path='/deliveries' element={<Delivery />}>
                         <Route path='add-delivery' element={<PerComponent component={<Adddelivery />} title={'create_delivery'} />} />
                     </Route>)}
