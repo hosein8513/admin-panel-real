@@ -45,3 +45,11 @@ export const deleteProductImage = (imageId)=>{
 export const getOneProduct = (id)=>{
   return httpservice(`/admin/products/${id}`,'get')
 }
+
+export const getFewerProducts = ()=>{
+  return httpservice('/admin/products/fewer_products','get')
+}
+
+export const toggleNotification = (id)=>{
+  return httpservice(`/admin/products/toggle_notification/${id}`,'get')
+}
